@@ -1,70 +1,16 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import { TicketsList, Ticket, Lists } from '../../components';
-
-const lists = [
-  {
-    id: 1,
-    title: 'TODO',
-    cards: [
-      {
-        id: 1,
-        title: 'Card 1 title',
-      },
-      {
-        id: 2,
-        title: 'Card 2 title',
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: 'In Progress',
-    cards: [
-      {
-        id: 3,
-        title: 'Card 3 title',
-      },
-      {
-        id: 4,
-        title: 'Card 4 title',
-      },
-    ],
-  },
-  {
-    id: 3,
-    title: 'Testing',
-    cards: [
-      {
-        id: 3,
-        title: 'Card 5 title',
-      },
-      {
-        id: 4,
-        title: 'Card 6 title',
-      },
-    ],
-  },
-  {
-    id: 4,
-    title: 'Done',
-    cards: [
-      {
-        id: 1,
-        title: 'Card 6 title',
-      },
-      {
-        id: 1,
-        title: 'Card 7 title',
-      },
-    ],
-  },
-];
+import { TicketsList, Ticket, Lists, PopupLogin } from '../../components';
+import lists from '../../data.js';
 
 class App extends React.Component {
-  state = {
-    data: lists,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: lists,
+      userName: 'ss',
+    };
+  }
 
   handleListTitleChange = (listId, title) => {
     const { data } = this.state;
@@ -82,23 +28,39 @@ class App extends React.Component {
     });
   };
 
+  handleOnCardClick = card => {
+    <h1 onClick={cardId => this.handleCardChange(list.id, cardId)}>Hello</h1>;
+  };
+
   handleCardChange = (listId, cardId, title) => {};
 
+  togglePopup = value => {
+    this.setState({ userName: value });
+  };
+
   render() {
-    return (
+    console.log('lists', lists);
+    return this.state.userName === '' ? (
+      <PopupLogin text="Enter your name:" closePopup={this.togglePopup} />
+    ) : (
       <div className="container-fluid">
         <div className="jumbotron">
           <h1 className="display-5">One more...Trello</h1>
-          <p className="lead">Hello, userNAME</p>
+          <p className="lead">
+            Hello, <b>{this.state.userName}</b>
+          </p>
         </div>
         <Lists
           lists={lists}
           itemRenderer={list => (
+            /*
             <TicketsList
               list={list}
               onTitleChange={this.handleListTitleChange}
               cardRenderer={card => <h1 onClick={cardId => this.handleCardChange(list.id, cardId)}>Hello</h1>}
             />
+            */
+            <TicketsList list={list} onTitleChange={this.handleListTitleChange} cardRenderer={this.handleOnCardClick} />
           )}
         />
         <pre>{JSON.stringify(this.state.data, 2, 2)}</pre>

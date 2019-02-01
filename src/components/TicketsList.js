@@ -1,5 +1,6 @@
 import React from 'react';
-import Ticket from './Ticket';
+import Card from './Card';
+import Cards from './Cards';
 
 class TicketsList extends React.Component {
   constructor(props) {
@@ -30,10 +31,7 @@ class TicketsList extends React.Component {
   handlerHeaderSubmit = event => {
     event.preventDefault();
     this.setState({ title: this.titleInputRef.current.value, isClickedHeader: false });
-    // this.setState({ title: event.target.value });
-    // console.log('handlerHeaderSubmit');
-    // this.setState({ title: this.titleInputRef._getText() });
-    // this.setState({ isClickedHeader: false });
+    this.changeData();
   };
 
   handlerHeaderClick = () => {
@@ -67,6 +65,7 @@ class TicketsList extends React.Component {
           value={title}
           onChange={this.handlerHeaderChange}
           onBlur={this.handlerHeaderSubmit}
+          required
         />
       </form>
     ) : (
@@ -92,11 +91,11 @@ class TicketsList extends React.Component {
     ) : (
       ''
     );
-
+    console.log(this.props.list);
     return (
       <div className="col-sm bg-light">
         {headText}
-        <Ticket lists={this.props.list} onChange={this.changeData} />
+        <Cards cards={this.props.list.cards} cardRenderer={card => <Card card={card} />} />
         {footerAdd}
         <div>
           <button onClick={this.changeData} className="btn btn-secondary mt-1">
