@@ -24,7 +24,7 @@ class Card extends React.Component {
 
     return (
       <section>
-        {this.state.isClicked ? <PopupCard closePopup={this.handleClose} /> : ''}
+        {this.state.isClicked ? <PopupCard item={this.props.card} closePopup={this.handleClose} /> : ''}
         <div className="alert alert-primary" onClick={this.handleLineClicked}>
           {title}
         </div>

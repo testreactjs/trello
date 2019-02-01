@@ -4,7 +4,7 @@ import './styles.css';
 class PopupCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isClickedHeader: true };
+    this.state = { isClickedHeader: false, title: 'title' };
   }
 
   handlerHeaderClick = e => {
@@ -16,27 +16,33 @@ class PopupCard extends React.Component {
   };
 
   handlerHeaderSubmit = e => {
-    console.log('handlerHeaderSubmit');
+    this.setState({ title: this.refs._title.value, isClickedHeader: false });
+    e.preventDefault();
   };
 
   render() {
-    const headText = this.state.isClickedHeader ? (
+    const titleText = this.state.isClickedHeader ? (
       <form onSubmit={this.handlerHeaderSubmit}>
         <input
-        /*
+          ref="_title"
+          className="form-control"
+          type="text"
+          onBlur={this.handlerHeaderSubmit}
+          required
+          /*
           ref={this.titleInputRef}
           className="form-control"
           type="text"
           value={title}
           onChange={this.handlerHeaderChange}
-          onBlur={this.handlerHeaderSubmit}
-          required
+
+
         */
         />
       </form>
     ) : (
-      <h1 className="display-10" onClick={this.handlerHeaderClick}>
-        title
+      <h1 className="display-10" onClick={() => this.setState({ isClickedHeader: true })}>
+        {this.state.title}
       </h1>
     );
     return (
@@ -45,6 +51,7 @@ class PopupCard extends React.Component {
           <button className="btn btn-secondary float-right" onClick={() => this.props.closePopup(true)}>
             Close
           </button>
+          {titleText}
         </div>
       </div>
     );
