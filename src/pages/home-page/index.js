@@ -28,11 +28,9 @@ class App extends React.Component {
     });
   };
 
-  handleOnCardClick = card => {
-    <h1 onClick={cardId => this.handleCardChange(list.id, cardId)}>Hello</h1>;
+  changeData = (ticket, list) => {
+    console.log('Change data!!');
   };
-
-  handleCardChange = (listId, cardId, title) => {};
 
   togglePopup = value => {
     this.setState({ userName: value });
@@ -60,7 +58,7 @@ class App extends React.Component {
               cardRenderer={card => <h1 onClick={cardId => this.handleCardChange(list.id, cardId)}>Hello</h1>}
             />
             */
-            <TicketsList list={list} onTitleChange={this.handleListTitleChange} cardRenderer={this.handleOnCardClick} />
+            <TicketsList list={list} onTitleChange={this.handleListTitleChange} changeData={this.changeData} />
           )}
         />
         <pre>{JSON.stringify(this.state.data, 2, 2)}</pre>

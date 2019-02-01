@@ -17,7 +17,7 @@ class TicketsList extends React.Component {
   };
 
   handlerFooterAddSubmit = event => {
-    this.setState({ isClickedAdd: false });
+    this.setState({ isClickedAdd: true });
   };
 
   handlerHeaderChange = event => {
@@ -98,7 +98,7 @@ class TicketsList extends React.Component {
         <Cards cards={this.props.list.cards} cardRenderer={card => <Card card={card} />} />
         {footerAdd}
         <div>
-          <button onClick={this.changeData} className="btn btn-secondary mt-1">
+          <button onClick={this.handlerFooterAddSubmit} className="btn btn-secondary mt-1">
             Add
           </button>
         </div>
