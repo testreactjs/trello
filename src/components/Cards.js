@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 export default class Cards extends Component {
   renderCard = cards => {
     const { cardRenderer } = this.props;
-    console.log(cards);
     return cards.map(item => {
       const { id } = item;
       return React.cloneElement(cardRenderer(item), {

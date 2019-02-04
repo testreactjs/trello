@@ -1,107 +1,120 @@
 import React from 'react';
 import Card from './Card';
 import Cards from './Cards';
+import {getData} from '../storage'
+
 
 class TicketsList extends React.Component {
   constructor(props) {
     super(props);
     this.titleInputRef = React.createRef();
+    this.addInputRef = React.createRef();
     const {
-      list: { title },
+      list: { title},
     } = props;
-    this.state = { isClickedHeader: false, title, isClickedAdd: false };
+    this.state = { isClickedHeader: false, title, isClickedAdd: false, list: props.list };
   }
 
-  handlerFooterAddChange = event => {
-    this.setState();
+  //Add new card
+  handleFooterAddSubmit = event => {
+    event.preventDefault();
+    if (!this.state.isClickedAdd) {
+
+      this.setState({ isClickedAdd: true }) ;
+    } else {
+
+      //Why let? ))
+      let list = Object.assign({},this.state.data);
+      const cards = [...this.state.list.cards];
+      const lastId =  cards.length > 0 ? cards[(cards.length-1)].id : 1;
+      list.cards.push({id: lastId+1, title: (this.addInputRef.current.value).trim()  === '' ? '_':this.addInputRef.current.value, text: '', user: getData("username"),  comments:[] });
+      this.setState({ list: list, isClickedAdd: false}, function () { this.props.changeData();})
+      //console.log("handleFooterAddSubmit list", this.state.list);
+
+    }
   };
 
-  handlerFooterAddSubmit = event => {
-    this.setState({ isClickedAdd: true });
-  };
-
-  handlerHeaderChange = event => {
-    // console.log('handlerHeaderChange!');
+  //Change Title name
+  handleHeaderChange = event => {
+    // console.log('handleHeaderChange!');
     event.preventDefault();
     this.setState({ title: this.titleInputRef.current.value });
-
-    // this.setState({ title: event.target.value });
   };
 
-  handlerHeaderSubmit = event => {
+  handleHeaderSubmit = event => {
     event.preventDefault();
     this.setState({ title: this.titleInputRef.current.value, isClickedHeader: false });
-    this.changeData();
+    //this.changeData();
+    const id = this.props.list.id;
+    this.props.onTitleChange(id, this.state.title)
   };
 
-  handlerHeaderClick = () => {
+  handleHeaderClick = () => {
     this.setState({ isClickedHeader: true }, () => {
       this.titleInputRef.current.focus();
     });
   };
 
-  changeData = () => {
-    const {
-      onTitleChange,
-      list: { id },
-    } = this.props;
-    onTitleChange(id, this.state.title);
-    console.log(this.props);
-    console.log(onTitleChange);
-  };
 
-  handlerAddButtonClick = () => {
-    // console.log(this.state.title);
-  };
+
+  onChangeCard = (item) => {
+    //console.log("TicketList.onChangeCard", item, this.props.list)
+    const cards = this.props.list.cards.map(value => {
+      if (value.id === item.id) {
+        return {
+          ...item
+        };
+      }
+      return value;
+    })
+    let newList = this.props.list;
+    newList.cards = cards;
+    this.setState({list: newList}, function () { this.props.changeData(this.props.list.id, this.state.list);})
+    //newList = [];
+    //this.props.changeData(this.props.list.id, this.state.list);
+
+  }
 
   render() {
     const { title } = this.state;
     const headText = this.state.isClickedHeader ? (
-      <form onSubmit={this.handlerHeaderSubmit}>
+      <form onSubmit={this.handleHeaderSubmit}>
         <input
           ref={this.titleInputRef}
           className="form-control"
           type="text"
           value={title}
-          onChange={this.handlerHeaderChange}
-          onBlur={this.handlerHeaderSubmit}
+          onChange={this.handleHeaderChange}
+          onBlur={this.handleHeaderSubmit}
           required
         />
       </form>
     ) : (
-      <h1 className="display-10" onClick={this.handlerHeaderClick}>
+      <h1 className="display-10" onClick={this.handleHeaderClick}>
         {title}
       </h1>
     );
 
     const footerAdd = this.state.isClickedAdd ? (
-      <form onSubmit={this.handlerFooterAddSubmit}>
-        <div className="input-group mb-3">
-          <input className="form-control" type="text" onBlur={this.handlerFooterAddSubmit} />
-          <div className="input-group-append">
-            <button className="btn btn-outline-secondary" type="button" id="button-addon2">
-              Add
-            </button>
-            <button className="btn btn-outline-secondary" type="button" id="button-addon2">
-              Del
-            </button>
-          </div>
+      <div>
+      <form onSubmit={this.handleFooterAddSubmit}>
+        <div className="input-group">
+          <input ref={this.addInputRef} className="form-control" type="text" onBlur={this.handleFooterAddSubmit} />
         </div>
       </form>
+      <button onClick={this.handleFooterAddSubmit} className="btn btn-success mt-1 w-100">
+      Добавить карточку
+    </button></div>
     ) : (
-      ''
+      <button onClick={this.handleFooterAddSubmit} className="btn btn-light mt-1 w-100">
+      + Добавить еще одну карточку
+    </button>
     );
-    console.log(this.props.list);
     return (
-      <div className="col-sm bg-light">
+      <div className="col-sm bg-light m-3">
         {headText}
-        <Cards cards={this.props.list.cards} cardRenderer={card => <Card card={card} />} />
+        <Cards cards={this.props.list.cards} cardRenderer={card => <Card card={card} changeCard={this.onChangeCard}/>} />
         {footerAdd}
-        <div>
-          <button onClick={this.handlerFooterAddSubmit} className="btn btn-secondary mt-1">
-            Add
-          </button>
-        </div>
       </div>
     );
   }

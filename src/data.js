@@ -5,11 +5,35 @@ export default [
     cards: [
       {
         id: 1,
-        title: 'Card 1 title',
+        title: 'Название первой карточки',
+        text: 'Текст первой карточки',
+        user: 'Юзер1',
+        comments: [
+          {
+            id: 1,
+            user: 'adadad',
+            text: 'Its my first comment',
+          }
+        ]
       },
       {
-        id: 2,
-        title: 'Card 2 title',
+        id: 5,
+        title: 'Название второй карточки',
+        text: 'Текст второй карточки',
+        user: 'Egir',
+        comments: [
+          {
+            id:1,
+            user: 'Ivan',
+            text: 'Itlsfklsf sdf ',
+          },
+          {
+            id:2,
+            user: 'Olga',
+            text: 'Olg  dad asa',
+          }
+
+        ]
       },
     ],
   },
@@ -20,10 +44,16 @@ export default [
       {
         id: 3,
         title: 'Card 3 title',
+        text: 'dadadaadadasdadsdds',
+        user: 'sddd',
+        comments: [],
       },
       {
         id: 4,
         title: 'Card 4 title',
+        text: 'dadadaadasadsdadasdds',
+        user: '233',
+        comments: [],
       },
     ],
   },
@@ -31,14 +61,7 @@ export default [
     id: 3,
     title: 'Testing',
     cards: [
-      {
-        id: 6,
-        title: 'Card 5 title',
-      },
-      {
-        id: 7,
-        title: 'Card 6 title',
-      },
+
     ],
   },
   {
@@ -48,10 +71,16 @@ export default [
       {
         id: 1,
         title: 'Card 6 title',
+        text: 'dadadaaaasasddadasdds',
+        user: 'Live',
+        comments: [],
       },
       {
         id: 2,
         title: 'Card 7 title',
+        text: 'dadadaadaasdasaddasdds',
+        user: 'Limon',
+        comments: [],
       },
     ],
   },
