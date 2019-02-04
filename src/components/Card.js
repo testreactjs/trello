@@ -6,36 +6,47 @@ class Card extends React.Component {
     super(props);
 
     this.state = { isClicked: false };
-    //console.log(this.props)
+    // console.log(this.props)
   }
 
   handleLineClicked = e => {
     this.setState({ isClicked: true });
-    //console.log('clicked line!');
-    //console.log("this.props", this.props );
+    // console.log('clicked line!');
+    // console.log("this.props", this.props );
   };
 
   handleClose = () => {
     this.setState({ isClicked: false });
-    //console.log('clickhandleClose!');
+    // console.log('clickhandleClose!');
   };
 
-  changeCard = (item) => this.props.changeCard(item)
+  changeCard = item => this.props.changeCard(item);
 
-
+  removeCard = id => this.props.removeCard(id);
 
   render() {
     // const { card, onChange } = this.props;
     const { title } = this.props.card;
-    //console.log(this.props.card)
-    const {comments} = this.props.card;
+    // console.log(this.props.card)
+    const { comments } = this.props.card;
 
     return (
       <section>
-        {this.state.isClicked ? <PopupCard item={this.props.card} closePopup={this.handleClose} changeCard={this.changeCard} /> : ''}
+        {this.state.isClicked ? (
+          <PopupCard
+            item={this.props.card}
+            closePopup={this.handleClose}
+            changeCard={this.changeCard}
+            removeCard={this.removeCard}
+          />
+        ) : (
+          ''
+        )}
         <div className="alert alert-primary" onClick={this.handleLineClicked}>
-          {title} <div className="float-right">{comments?comments.length:0} {String.fromCodePoint(0x1F4AC)} </div>
-
+          {title}
+          <div className="float-right">
+            {comments ? comments.length : 0} {String.fromCodePoint(0x1f4ac)}{' '}
+          </div>
         </div>
       </section>
       /*
