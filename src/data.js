@@ -1,34 +1,36 @@
+import { v4 } from 'uuid';
+
 export default [
   {
-    id: 1,
+    id: v4(),
     title: 'TODO',
     cards: [
       {
-        id: 1,
+        id: v4(),
         title: 'Название первой карточки',
         text: 'Текст первой карточки',
         user: 'Юзер1',
         comments: [
           {
-            id: 1,
+            id: v4(),
             user: 'adadad',
             text: 'Its my first comment',
           },
         ],
       },
       {
-        id: 5,
+        id: v4(),
         title: 'Название второй карточки',
         text: 'Текст второй карточки',
         user: 'Egir',
         comments: [
           {
-            id: 1,
+            id: v4(),
             user: 'Ivan',
             text: 'Itlsfklsf sdf ',
           },
           {
-            id: 2,
+            id: v4(),
             user: 'Olga',
             text: 'Olg  dad asa',
           },
@@ -37,18 +39,18 @@ export default [
     ],
   },
   {
-    id: 2,
+    id: v4(),
     title: 'In Progress',
     cards: [
       {
-        id: 3,
+        id: v4(),
         title: 'Card 3 title',
         text: 'dadadaadadasdadsdds',
         user: 'sddd',
         comments: [],
       },
       {
-        id: 4,
+        id: v4(),
         title: 'Card 4 title',
         text: 'dadadaadasadsdadasdds',
         user: '233',
@@ -57,23 +59,23 @@ export default [
     ],
   },
   {
-    id: 3,
+    id: v4(),
     title: 'Testing',
     cards: [],
   },
   {
-    id: 4,
+    id: v4(),
     title: 'Done',
     cards: [
       {
-        id: 1,
+        id: v4(),
         title: 'Card 6 title',
         text: 'dadadaaaasasddadasdds',
         user: 'Live',
         comments: [],
       },
       {
-        id: 2,
+        id: v4(),
         title: 'Card 7 title',
         text: 'dadadaadaasdasaddasdds',
         user: 'Limon',

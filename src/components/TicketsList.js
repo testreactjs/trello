@@ -12,35 +12,16 @@ class TicketsList extends React.Component {
     const {
       list: { title },
     } = props;
-    this.state = { isClickedHeader: false, title, isClickedAdd: false, list: props.list };
+    this.state = { isClickedHeader: false, title, isClickedAdd: false };
   }
 
   // Add new card
   handleFooterAddSubmit = event => {
     event.preventDefault();
-    if (!this.state.isClickedAdd) {
-      this.setState({ isClickedAdd: true });
-    } else {
-      // Why let? ))
-      const list = Object.assign({}, this.state.list);
-      const cards = [...this.state.list.cards];
-      const lastId = cards.length > 0 ? cards[cards.length - 1].id : 1;
-
-      list.cards.push({
-        id: lastId + 1,
-        title: this.addInputRef.current.value.trim() === '' ? '_' : this.addInputRef.current.value,
-        text: '',
-        user: getData('username'),
-        comments: [],
-      });
-      // console.log('handleFooterAddSubmit new list', list);
-      this.setState({ list, isClickedAdd: false }, () => {
-        // this.onChangeCard(list)
-        this.props.changeData(this.props.list.id, this.state.list);
-      });
-    }
+    this.setState({ isClickedAdd: true });
   };
 
+  /*
   // Удаление карточки
   removeCard = idRemove => {
     // console.log('removeCard this.state.list, idRemove', this.state.list, idRemove);
@@ -57,7 +38,7 @@ class TicketsList extends React.Component {
       this.props.changeData(this.props.list.id, this.state.list);
     });
   };
-
+*/
   // Change Title name
   handleHeaderChange = event => {
     // console.log('handleHeaderChange!');
@@ -79,6 +60,7 @@ class TicketsList extends React.Component {
     });
   };
 
+  /*
   onChangeCard = item => {
     // console.log('TicketList.onChangeCard', item, this.props.list);
     const cards = this.props.list.cards.map(value => {
@@ -97,10 +79,10 @@ class TicketsList extends React.Component {
     // newList = [];
     // this.props.changeData(this.props.list.id, this.state.list);
   };
+*/
 
-  render() {
-    const { title } = this.state;
-    const headText = this.state.isClickedHeader ? (
+  headTextFunc = title => {
+    const headText2 = this.state.isClickedHeader ? (
       <form onSubmit={this.handleHeaderSubmit}>
         <input
           ref={this.titleInputRef}
@@ -118,14 +100,30 @@ class TicketsList extends React.Component {
       </h1>
     );
 
+    return { headText2 };
+  };
+
+  render() {
+    const { title: stateTitle } = this.state;
+    const {
+      onAddNewCard,
+      list: { id, title },
+    } = this.props;
+
+    this.headTextFunc(title);
+
     const footerAdd = this.state.isClickedAdd ? (
       <div>
-        <form onSubmit={this.handleFooterAddSubmit}>
+        <form
+          onSubmit={() => {
+            onAddNewCard(id, stateTitle);
+          }}
+        >
           <div className="input-group">
             <input ref={this.addInputRef} className="form-control" type="text" onBlur={this.handleFooterAddSubmit} />
           </div>
         </form>
-        <button onClick={this.handleFooterAddSubmit} className="btn btn-success mt-1 w-100">
+        <button onClick={() => onAddNewCard(id, stateTitle)} className="btn btn-success mt-1 w-100">
           Добавить карточку
         </button>
       </div>
@@ -134,12 +132,12 @@ class TicketsList extends React.Component {
         + Добавить еще одну карточку
       </button>
     );
-    // console.log('TicketList Render', this.state.list);
+
     return (
       <div className="col-sm bg-light m-3">
         {headText}
         <Cards
-          cards={this.state.list.cards}
+          cards={this.props.list.cards}
           cardRenderer={card => <Card card={card} changeCard={this.onChangeCard} removeCard={this.removeCard} />}
         />
 

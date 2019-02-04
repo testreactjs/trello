@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 
+import { v4 } from 'uuid';
 import { TicketsList, Lists, PopupLogin } from '../../components';
 import lists from '../../data.js';
 import { getData, saveData } from '../../storage';
@@ -53,11 +54,7 @@ class App extends React.Component {
 
   // Update data
   changeData = (id, list) => {
-    // console.log('Change data in index.js id, list, this.state');
-    // console.log(id, list, this.state);
-
     const { data } = this.state;
-    // console.log(data);
     const newData = data.map(dataItem => {
       if (dataItem.id === id) {
         return {
@@ -76,8 +73,20 @@ class App extends React.Component {
     );
   };
 
-  addNewCard = event => {
-    console.log('addNewCard');
+  handleAddCard = (listId, title) => {
+    const { data } = this.state;
+    const updatedData = data.map(list => {
+      const { id } = list;
+      if (id === listId) {
+        const { cards } = list;
+        return { ...list, cards: [...cards, { id: v4(), title, comments: [] }] };
+      }
+      return list;
+    });
+
+    this.setState({ data: updatedData }, () => {
+      console.log('Updated data: ', this.state.data);
+    });
   };
 
   // Удаление карточки
@@ -107,6 +116,7 @@ class App extends React.Component {
   };
 
   render() {
+    const { data } = this.state;
     return this.state.user === '' ? (
       <PopupLogin text="Введите свое имя:" closePopup={this.togglePopup} />
     ) : (
@@ -121,13 +131,12 @@ class App extends React.Component {
           </p>
         </div>
         <Lists
-          lists={lists}
+          lists={data}
           itemRenderer={list => (
             <TicketsList
               list={list}
               onTitleChange={this.handleListTitleChange}
-              removeCard2={this.removeCard2}
-              addNewCard={this.addNewCard}
+              onAddNewCard={this.handleAddCard}
               changeData={this.changeData}
               removeCard={this.removeCard}
             />

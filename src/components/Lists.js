@@ -13,6 +13,7 @@ export default class Lists extends Component {
 
   render() {
     const { lists } = this.props;
+    console.log('', lists);
     return <div className="row">{this.renderList(lists)}</div>;
   }
 }
