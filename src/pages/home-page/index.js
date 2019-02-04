@@ -139,6 +139,7 @@ class App extends React.Component {
               onAddNewCard={this.handleAddCard}
               changeData={this.changeData}
               removeCard={this.removeCard}
+              itemRenderer={list => <Card card={list.cards} />}
             />
           )}
         />

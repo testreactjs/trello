@@ -6,7 +6,8 @@ class Card extends React.Component {
     super(props);
 
     this.state = { isClicked: false };
-    // console.log(this.props)
+
+    console.log(this.props);
   }
 
   handleLineClicked = e => {

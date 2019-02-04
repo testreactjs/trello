@@ -55,9 +55,7 @@ class TicketsList extends React.Component {
   };
 
   handleHeaderClick = () => {
-    this.setState({ isClickedHeader: true }, () => {
-      this.titleInputRef.current.focus();
-    });
+    this.setState({ isClickedHeader: true });
   };
 
   /*
@@ -82,7 +80,7 @@ class TicketsList extends React.Component {
 */
 
   headTextFunc = title => {
-    const headText2 = this.state.isClickedHeader ? (
+    const headText = this.state.isClickedHeader ? (
       <form onSubmit={this.handleHeaderSubmit}>
         <input
           ref={this.titleInputRef}
@@ -100,7 +98,7 @@ class TicketsList extends React.Component {
       </h1>
     );
 
-    return { headText2 };
+    return headText;
   };
 
   render() {
@@ -110,7 +108,7 @@ class TicketsList extends React.Component {
       list: { id, title },
     } = this.props;
 
-    this.headTextFunc(title);
+    const headText = this.headTextFunc(title);
 
     const footerAdd = this.state.isClickedAdd ? (
       <div>
