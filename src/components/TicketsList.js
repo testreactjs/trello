@@ -8,6 +8,7 @@ class TicketsList extends React.Component {
     super(props);
     this.titleInputRef = React.createRef();
     this.addInputRef = React.createRef();
+
     const {
       list: { title },
     } = props;
@@ -32,11 +33,29 @@ class TicketsList extends React.Component {
         user: getData('username'),
         comments: [],
       });
+      console.log('handleFooterAddSubmit new list', list);
       this.setState({ list, isClickedAdd: false }, () => {
-        this.props.changeData();
+        // this.onChangeCard(list)
+        this.props.changeData(this.props.list.id, this.state.list);
       });
-      // console.log("handleFooterAddSubmit list", this.state.list);
     }
+  };
+
+  // Удаление карточки
+  removeCard = idRemove => {
+    console.log('removeCard this.state.list, idRemove', this.state.list, idRemove);
+    const list = this.state.list;
+    const cards = this.state.list.cards.filter(value => {
+      if (value.id != idRemove) {
+        return value;
+      }
+    });
+    list.cards = cards;
+
+    console.log('removeCard list', list);
+    this.setState({ list }, () => {
+      this.props.changeData(this.props.list.id, this.state.list);
+    });
   };
 
   // Change Title name
@@ -60,25 +79,8 @@ class TicketsList extends React.Component {
     });
   };
 
-  // Удаление карточки
-  removeCard = idRemove => {
-    console.log('remove', this.state.list, idRemove);
-    const list = this.state.list;
-    const cards = this.state.list.cards.filter(value => {
-      if (value.id != idRemove) {
-        return value;
-      }
-    });
-    list.cards = cards;
-
-    // console.log(list);
-    this.setState({ list }, () => {
-      this.props.changeData();
-    });
-  };
-
   onChangeCard = item => {
-    // console.log("TicketList.onChangeCard", item, this.props.list)
+    console.log('TicketList.onChangeCard', item, this.props.list);
     const cards = this.props.list.cards.map(value => {
       if (value.id === item.id) {
         return {
@@ -132,11 +134,12 @@ class TicketsList extends React.Component {
         + Добавить еще одну карточку
       </button>
     );
+    // console.log('TicketList Render', this.state.list);
     return (
       <div className="col-sm bg-light m-3">
         {headText}
         <Cards
-          cards={this.props.list.cards}
+          cards={this.state.list.cards}
           cardRenderer={card => <Card card={card} changeCard={this.onChangeCard} removeCard={this.removeCard} />}
         />
 

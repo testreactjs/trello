@@ -1,39 +1,34 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+
 import { TicketsList, Lists, PopupLogin } from '../../components';
 import lists from '../../data.js';
 import { getData, saveData } from '../../storage';
-import { combinator } from 'postcss-selector-parser';
 
 class App extends React.Component {
-    constructor(props) {
-      super(props);
-      const user = getData("username")
-      this.state  = {
-        data: lists,
-        user: user?user:'',
-      }
+  constructor(props) {
+    super(props);
+    const user = getData('username');
+    this.state = {
+      data: lists,
+      user: user || '',
+    };
   }
 
-
-
-
-  //Write on local storage
+  // Write on local storage
   componentDidMount() {
-    saveData(this.state.data, "data");
-    //saveData(this.state.user, "username");
+    saveData(this.state.data, 'data');
+    // saveData(this.state.user, "username");
   }
 
-  //Logout
-  handleLogout = () =>
-  {
-    this.setState({user:''})
-  }
+  // Logout
+  handleLogout = () => {
+    this.setState({ user: '' });
+  };
 
-
-  //Change Title
+  // Change Title
   handleListTitleChange = (listId, title) => {
-    //console.log('handleListTitleChange ', listId, title);
+    // console.log('handleListTitleChange ', listId, title);
     const { data } = this.state;
     const newData = data.map(dataItem => {
       if (dataItem.id === listId) {
@@ -48,18 +43,20 @@ class App extends React.Component {
       data: newData,
     });
 
-    //console.log("newData", newData);
+    // console.log("newData", newData);
   };
 
-  //Update data
+  // Update data
   changeData = (id, list) => {
-    //console.log('Change data!! NEW ', id, list);
+    console.log('Change data in index.js id, list, this.state');
+    console.log(id, list, this.state);
+
     const { data } = this.state;
-    //console.log(data);
+    // console.log(data);
     const newData = data.map(dataItem => {
       if (dataItem.id === id) {
         return {
-          ...list
+          ...list,
         };
       }
       return dataItem;
@@ -67,14 +64,31 @@ class App extends React.Component {
     this.setState({
       data: newData,
     });
-    //console.log(data);
+    // console.log(data);
   };
 
-  //Login
+  // Удаление карточки
+  removeCard = idRemove => {
+    console.log('remove', this.state.list, idRemove);
+    const list = this.state.list;
+    const cards = this.state.list.cards.filter(value => {
+      if (value.id != idRemove) {
+        return value;
+      }
+    });
+    list.cards = cards;
+
+    // console.log(list);
+    this.setState({ list }, () => {
+      this.props.changeData(this.props.list.id, this.state.list);
+    });
+  };
+
+  // Login
   togglePopup = value => {
-    //console.log("togglePopup". value);
-    this.setState({ user: value});
-    saveData(value, "username");
+    // console.log("togglePopup". value);
+    this.setState({ user: value });
+    saveData(value, 'username');
   };
 
   render() {
@@ -84,7 +98,9 @@ class App extends React.Component {
       <div className="container-fluid">
         <div className="jumbotron">
           <h1 className="display-5">One more...Trello</h1>
-          <button className="btn float-right" onClick={this.handleLogout}>Logout</button>
+          <button className="btn float-right" onClick={this.handleLogout}>
+            Logout
+          </button>
           <p className="lead">
             Hello, <b>{this.state.user}</b>
           </p>
@@ -92,12 +108,16 @@ class App extends React.Component {
         <Lists
           lists={lists}
           itemRenderer={list => (
-            <TicketsList list={list} onTitleChange={this.handleListTitleChange} changeData={this.changeData} />
+            <TicketsList
+              list={list}
+              onTitleChange={this.handleListTitleChange}
+              changeData={this.changeData}
+              removeCard={this.removeCard}
+            />
           )}
         />
         <pre>{JSON.stringify(this.state.data, 2, 2)}</pre>
       </div>
-
     );
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles.css';
-import { timingSafeEqual } from 'crypto';
+
 import { getData } from '../storage';
 
 class PopupCard extends React.Component {
@@ -13,8 +13,7 @@ class PopupCard extends React.Component {
     const title = item.title;
     // Doesnt Work, Why?
     // const {title} = item
-
-    // console.log(title, item);
+    // console.log('PopupCard constructor', item);
 
     this.state = {
       isClickedHeader: false,
@@ -53,7 +52,7 @@ class PopupCard extends React.Component {
   };
 
   changeCard = () => {
-    console.log('Изменяем данные changeCard', this.state.data);
+    //console.log('Изменяем данные changeCard', this.state.data);
     this.props.changeCard(this.state.data);
   };
 
@@ -230,6 +229,7 @@ class PopupCard extends React.Component {
     const styleButtonAddComment =
       this.state.comment === '' ? 'form-control btn btn-light mt-1 w-10' : 'form-control btn btn-success mt-1';
     const { data } = this.state;
+    //console.log('Popup card render ', this.state.data);
     return (
       <div className="popup">
         <div className="popup_inner2 form-group">
