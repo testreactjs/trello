@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import { v4 } from 'uuid';
-import { TicketsList, Lists, PopupLogin } from '../../components';
+import { List, Lists, PopupLogin, Card } from '../../components';
 import lists from '../../data.js';
 import { getData, saveData } from '../../storage';
 
@@ -74,6 +74,7 @@ class App extends React.Component {
   };
 
   handleAddCard = (listId, title) => {
+    console.log('handleAddCard', title);
     const { data } = this.state;
     const updatedData = data.map(list => {
       const { id } = list;
@@ -115,6 +116,10 @@ class App extends React.Component {
     saveData(value, 'username');
   };
 
+  handleCardChangeTitle = (id, title) => {
+    console.log('handleCardChangeTitle');
+  };
+
   render() {
     const { data } = this.state;
     return this.state.user === '' ? (
@@ -133,13 +138,12 @@ class App extends React.Component {
         <Lists
           lists={data}
           itemRenderer={list => (
-            <TicketsList
+            <List
               list={list}
               onTitleChange={this.handleListTitleChange}
               onAddNewCard={this.handleAddCard}
-              changeData={this.changeData}
               removeCard={this.removeCard}
-              itemRenderer={list => <Card card={list.cards} />}
+              itemRenderer={card => <Card card={card} onCardChangeTitle={this.handleCardChangeTitle} />}
             />
           )}
         />
