@@ -13,8 +13,8 @@ export default [
             id: 1,
             user: 'adadad',
             text: 'Its my first comment',
-          }
-        ]
+          },
+        ],
       },
       {
         id: 5,
@@ -23,17 +23,16 @@ export default [
         user: 'Egir',
         comments: [
           {
-            id:1,
+            id: 1,
             user: 'Ivan',
             text: 'Itlsfklsf sdf ',
           },
           {
-            id:2,
+            id: 2,
             user: 'Olga',
             text: 'Olg  dad asa',
-          }
-
-        ]
+          },
+        ],
       },
     ],
   },
@@ -60,9 +59,7 @@ export default [
   {
     id: 3,
     title: 'Testing',
-    cards: [
-
-    ],
+    cards: [],
   },
   {
     id: 4,

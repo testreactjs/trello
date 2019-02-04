@@ -39,17 +39,22 @@ class App extends React.Component {
       }
       return dataItem;
     });
-    this.setState({
-      data: newData,
-    });
+    this.setState(
+      {
+        data: newData,
+      },
+      () => {
+        saveData(newData, 'data');
+      },
+    );
 
     // console.log("newData", newData);
   };
 
   // Update data
   changeData = (id, list) => {
-    console.log('Change data in index.js id, list, this.state');
-    console.log(id, list, this.state);
+    // console.log('Change data in index.js id, list, this.state');
+    // console.log(id, list, this.state);
 
     const { data } = this.state;
     // console.log(data);
@@ -61,15 +66,24 @@ class App extends React.Component {
       }
       return dataItem;
     });
-    this.setState({
-      data: newData,
-    });
-    // console.log(data);
+    this.setState(
+      {
+        data: newData,
+      },
+      () => {
+        saveData(newData, 'data');
+      },
+    );
+  };
+
+  addNewCard = event => {
+    console.log('addNewCard');
   };
 
   // Удаление карточки
   removeCard = idRemove => {
     console.log('remove', this.state.list, idRemove);
+    /*
     const list = this.state.list;
     const cards = this.state.list.cards.filter(value => {
       if (value.id != idRemove) {
@@ -82,6 +96,7 @@ class App extends React.Component {
     this.setState({ list }, () => {
       this.props.changeData(this.props.list.id, this.state.list);
     });
+    */
   };
 
   // Login
@@ -111,6 +126,8 @@ class App extends React.Component {
             <TicketsList
               list={list}
               onTitleChange={this.handleListTitleChange}
+              removeCard2={this.removeCard2}
+              addNewCard={this.addNewCard}
               changeData={this.changeData}
               removeCard={this.removeCard}
             />
@@ -123,3 +140,14 @@ class App extends React.Component {
 }
 
 export default App;
+/*
+
+              itemRenderer={() => (
+                <Card
+                  onCArdTitleChange={this.handleCardTitleChange}
+                  commentsRenderer={() => (
+                    <Comments itemRenderer={() => <Comment onChange={this.handleCommentChange} />} />
+                  )}
+                />
+              )}
+              */

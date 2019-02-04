@@ -52,7 +52,7 @@ class PopupCard extends React.Component {
   };
 
   changeCard = () => {
-    //console.log('Изменяем данные changeCard', this.state.data);
+    // console.log('Изменяем данные changeCard', this.state.data);
     this.props.changeCard(this.state.data);
   };
 
@@ -229,7 +229,7 @@ class PopupCard extends React.Component {
     const styleButtonAddComment =
       this.state.comment === '' ? 'form-control btn btn-light mt-1 w-10' : 'form-control btn btn-success mt-1';
     const { data } = this.state;
-    //console.log('Popup card render ', this.state.data);
+    // console.log('Popup card render ', this.state.data);
     return (
       <div className="popup">
         <div className="popup_inner2 form-group">

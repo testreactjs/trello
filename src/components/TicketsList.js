@@ -33,7 +33,7 @@ class TicketsList extends React.Component {
         user: getData('username'),
         comments: [],
       });
-      console.log('handleFooterAddSubmit new list', list);
+      // console.log('handleFooterAddSubmit new list', list);
       this.setState({ list, isClickedAdd: false }, () => {
         // this.onChangeCard(list)
         this.props.changeData(this.props.list.id, this.state.list);
@@ -43,7 +43,7 @@ class TicketsList extends React.Component {
 
   // Удаление карточки
   removeCard = idRemove => {
-    console.log('removeCard this.state.list, idRemove', this.state.list, idRemove);
+    // console.log('removeCard this.state.list, idRemove', this.state.list, idRemove);
     const list = this.state.list;
     const cards = this.state.list.cards.filter(value => {
       if (value.id != idRemove) {
@@ -80,7 +80,7 @@ class TicketsList extends React.Component {
   };
 
   onChangeCard = item => {
-    console.log('TicketList.onChangeCard', item, this.props.list);
+    // console.log('TicketList.onChangeCard', item, this.props.list);
     const cards = this.props.list.cards.map(value => {
       if (value.id === item.id) {
         return {
