@@ -14,15 +14,7 @@ class App extends React.Component {
     this.state = {
       data: lists,
       user: user || '',
-      isClickedOnCard: false,
-      card: {},
     };
-  }
-
-  // Write on local storage
-  componentDidMount() {
-    saveData(this.state.data, 'data');
-    // saveData(this.state.user, "username");
   }
 
   // Logout
@@ -32,7 +24,6 @@ class App extends React.Component {
 
   // Change Title
   handleListTitleChange = (listId, title) => {
-    // console.log('handleListTitleChange ', listId, title);
     const { data } = this.state;
     const newData = data.map(dataItem => {
       if (dataItem.id === listId) {
@@ -43,14 +34,9 @@ class App extends React.Component {
       }
       return dataItem;
     });
-    this.setState(
-      {
-        data: newData,
-      },
-      () => {
-        saveData(newData, 'data');
-      },
-    );
+    this.setState({
+      data: newData,
+    });
 
     // console.log("newData", newData);
   };
@@ -119,8 +105,8 @@ class App extends React.Component {
     this.setState({ data: updatedData });
   };
 
+  // Add new comment
   handleAddComment = (text, card, listId) => {
-    // console.log('handleAddComment');
     const { data } = this.state;
     const updatedData = data.map(list => {
       const { id } = list;
@@ -129,7 +115,6 @@ class App extends React.Component {
         const newCards = cards.map(item => {
           if (item.id === card.id) {
             const comments = [...item.comments, { id: v4(), text, user: getData('username') }];
-            // console.log({ ...card, comments });
             return { ...card, comments };
           }
           return item;
@@ -138,10 +123,10 @@ class App extends React.Component {
       }
       return list;
     });
-    // console.log(updatedData);
     this.setState({ data: updatedData });
   };
 
+  // Del card
   handleRemoveCard = (card, listId) => {
     const { data } = this.state;
     const updatedData = data.map(list => {
@@ -156,13 +141,9 @@ class App extends React.Component {
     this.setState({ data: updatedData });
   };
 
-  // закрытие карты
-  handleClosePopupCard = () => {
-    this.setState({ isClickedOnCard: false });
-  };
-
-  handleEditComment = (text, card, listId) => {
-    console.log('handleEditComment', text, card, listId);
+  // change comment
+  handleEditComment = (text, id, card, listId) => {
+    console.log('handleEditComment', text, id, card, listId);
     const { data } = this.state;
     const updatedData = data.map(list => {
       const { id } = list;
@@ -170,9 +151,13 @@ class App extends React.Component {
         const { cards } = list;
         const newCards = cards.map(item => {
           if (item.id === card.id) {
-            const comments = [...item.comments, { id: v4(), text, user: getData('username') }];
+            const newComments = item.comments(value => {
+              if (value.id === id) return { id, text, user: value.user };
+              return value;
+            });
+
             // console.log({ ...card, comments });
-            return { ...card, comments };
+            return { ...card, newComments };
           }
           return item;
         });

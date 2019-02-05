@@ -5,20 +5,6 @@ class Card extends React.Component {
   state = {
     isShowingModal: false,
   };
-  /*
-  renderCards = () => {
-    const {
-      itemRenderer,
-      list: { cards },
-    } = this.props;
-
-    return cards.map(card => {
-      return React.cloneElement(itemRenderer(card), {
-        key: card.id,
-      });
-    });
-  };
-*/
 
   renderModal = () => {
     const { idList } = this.props;
@@ -34,8 +20,6 @@ class Card extends React.Component {
   };
 
   render() {
-    // console.log('this.props Card', this.props);
-
     const { isShowingModal } = this.state;
     const {
       card,
@@ -47,7 +31,6 @@ class Card extends React.Component {
       onCardEditComment,
     } = this.props;
     const { title, comments } = card;
-    // console.log(isShowingModal);
     return (
       <section>
         {isShowingModal && (
@@ -74,3 +57,18 @@ class Card extends React.Component {
 }
 
 export default Card;
+
+/*
+  renderCards = () => {
+    const {
+      itemRenderer,
+      list: { cards },
+    } = this.props;
+
+    return cards.map(card => {
+      return React.cloneElement(itemRenderer(card), {
+        key: card.id,
+      });
+    });
+  };
+*/

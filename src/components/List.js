@@ -12,7 +12,6 @@ class List extends React.Component {
     const {
       list: { title },
     } = props;
-    // console.log('props', props);
 
     this.state = { isClickedHeader: false, title, titleNewCard: '', isClickedAdd: false, titleLists: title };
   }
@@ -20,7 +19,6 @@ class List extends React.Component {
   // Add new card
   handleFooterAddSubmit = event => {
     event.preventDefault();
-    // console.log('handleFooterAddSubmit');
     const { isClickedAdd } = this.state;
     const {
       onAddNewCard,

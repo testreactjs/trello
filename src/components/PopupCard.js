@@ -7,7 +7,7 @@ class PopupCard extends React.Component {
   constructor(props) {
     super(props);
 
-    const { item, idList } = props;
+    const { item } = props;
 
     const { title, text } = props.item;
 
@@ -20,28 +20,20 @@ class PopupCard extends React.Component {
       textChangeComment: '',
       username: getData('username'),
       text,
-      idList,
     };
 
     this.titleCardRef = React.createRef();
     this.textCardRef = React.createRef();
     this.commentCardRef = React.createRef();
     this.changeElement = React.createRef();
-    console.log('PopupCard', this.props);
   }
-
-  handleHeaderClick = () => {
-    // console.log('handleHeaderClick');
-  };
 
   handleTitleChange = () => {
     this.setState({ title: this.titleCardRef.current.value });
-    // console.log('handleHeaderClick');
   };
 
   handleTitleSubmit = e => {
     e.preventDefault();
-    const { onCardSubmitTitle } = this.props;
     this.setState({ isClickedHeader: false });
     this.props.onCardSubmitTitle(this.titleCardRef.current.value);
   };
@@ -53,7 +45,6 @@ class PopupCard extends React.Component {
 
   // Add new comment
   handleTextareaComment = () => {
-    // console.log("handleComment")
     this.setState({ comment: this.commentCardRef.current.value });
   };
 
@@ -65,11 +56,8 @@ class PopupCard extends React.Component {
   };
 
   handleClickChangeComment = event => {
-    // console.log('handleClickChangeComment');
     const { comments } = this.state.data;
-    const tempComments = comments.filter(item => {
-      return item.id != event.currentTarget.id;
-    });
+
     // console.log('tempComments', tempComments);
     if (comments.length !== 0) {
       this.setState({ textChangeComment: comments[0].text });
@@ -91,20 +79,7 @@ class PopupCard extends React.Component {
   handleSaveEditedComment = event => {
     const { editComment } = this.state;
     if (editComment !== 0) {
-      // / lkdjlkdjflk ajdlkf lkafdj. j.f j.adksfj l.ajfl ajlfdk jaslfj laksjf lajsflk jsfk jsjf
-      this.props.onCardEditComment(this.changeElement.current.value);
-      /*
-      const list = Object.assign({}, this.state.data);
-      const comments = this.state.data.comments.map(item => {
-        if (item.id == event.currentTarget.id) {
-          item.text = this.changeElement.current.value;
-        }
-        return item;
-      });
-      list.comments = comments;
-      */
-      // list = list.comments.comments.text = this.changeElement.current.value;
-      // console.log(comments);
+      this.props.onCardEditComment(this.changeElement.current.value, editComment);
       this.setState({ editComment: 0 });
     }
   };
