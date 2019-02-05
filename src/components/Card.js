@@ -34,22 +34,30 @@ class Card extends React.Component {
   };
 
   render() {
-    console.log('this.props Card', this.props);
+    // console.log('this.props Card', this.props);
 
     const { isShowingModal } = this.state;
-    const { card, onSubmitDescription } = this.props;
+    const {
+      card,
+      onSubmitDescription,
+      onCardSubmitTitle,
+      onCardAddComment,
+      onCardDeleteComment,
+      onCardRemoveCard,
+      onCardEditComment,
+    } = this.props;
     const { title, comments } = card;
+    // console.log(isShowingModal);
     return (
       <section>
         {isShowingModal && (
           <PopupCard
             item={card}
-            onCardSubmitTitle={this.handleCardChangeTitle}
-            onCardSubmitDescription={this.handleCardChangeDescription}
-            onCardAddComment={this.handleAddComment}
-            onCardEditComment={this.handleEditComment}
-            onCardDeleteComment={this.handleDeleteComment}
-            onCardRemoveCard={this.handleRemoveCard}
+            onCardSubmitTitle={onCardSubmitTitle}
+            onCardAddComment={onCardAddComment}
+            onCardEditComment={onCardEditComment}
+            onCardDeleteComment={onCardDeleteComment}
+            onCardRemoveCard={onCardRemoveCard}
             onSubmitDescription={onSubmitDescription}
             onClose={this.handleCardClose}
           />
