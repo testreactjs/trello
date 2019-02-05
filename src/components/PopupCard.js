@@ -229,7 +229,7 @@ class PopupCard extends React.Component {
     const styleButtonAddComment =
       this.state.comment === '' ? 'form-control btn btn-light mt-1 w-10' : 'form-control btn btn-success mt-1';
     const { data } = this.state;
-    // console.log('Popup card render ', this.state.data);
+    console.log('Popup card render ', this.state.data);
     return (
       <div className="popup">
         <div className="popup_inner2 form-group">
@@ -240,7 +240,6 @@ class PopupCard extends React.Component {
           <div>
             Создал: <b>{this.state.data.user}</b>
           </div>
-
           <label className="pt-3">Описание:</label>
           <textarea
             ref={this.textCardRef}
@@ -263,7 +262,7 @@ class PopupCard extends React.Component {
             Добавить комментарий
           </button>
           <label className="pt-3">Комментарии:</label>
-          {data.comments.length != 0 ? data.comments.map(this.showComment) : ' Нет'}
+          {/* data.comments.length != 0 ? data.comments.map(this.showComment) : ' Нет' */}
           <button type="button" className="btn btn-secondary form-control mt-4" onClick={this.handleRemoveCard}>
             Удалить карточку
           </button>

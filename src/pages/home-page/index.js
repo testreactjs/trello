@@ -5,6 +5,7 @@ import { v4 } from 'uuid';
 import { List, Lists, PopupLogin, Card } from '../../components';
 import lists from '../../data.js';
 import { getData, saveData } from '../../storage';
+import PopupCard from '../../components/PopupCard';
 
 class App extends React.Component {
   constructor(props) {
@@ -13,6 +14,8 @@ class App extends React.Component {
     this.state = {
       data: lists,
       user: user || '',
+      isClickedOnCard: false,
+      card: {},
     };
   }
 
@@ -29,7 +32,7 @@ class App extends React.Component {
 
   // Change Title
   handleListTitleChange = (listId, title) => {
-    console.log('handleListTitleChange ', listId, title);
+    // console.log('handleListTitleChange ', listId, title);
     const { data } = this.state;
     const newData = data.map(dataItem => {
       if (dataItem.id === listId) {
@@ -74,20 +77,18 @@ class App extends React.Component {
   };
 
   handleAddCard = (listId, title) => {
-    console.log('handleAddCard!!!!', title);
+    // console.log('handleAddCard!!!!', title);
     const { data } = this.state;
     const updatedData = data.map(list => {
       const { id } = list;
       if (id === listId) {
         const { cards } = list;
-        return { ...list, cards: [...cards, { id: v4(), title, comments: [] }] };
+        return { ...list, cards: [...cards, { id: v4(), title, text: '', user: getData('username'), comments: [] }] };
       }
       return list;
     });
 
-    this.setState({ data: updatedData }, () => {
-      console.log('Updated data: ', this.state.data);
-    });
+    this.setState({ data: updatedData });
   };
 
   // Удаление карточки
@@ -116,12 +117,28 @@ class App extends React.Component {
     saveData(value, 'username');
   };
 
-  handleCardChangeTitle = (id, title) => {
+  handleCardChangeTitle = title => {
     console.log('handleCardChangeTitle');
   };
 
+  changeCard = () => {
+    console.log('changeCard');
+  };
+
+  // Нажатие по карте
+  handleCardClick = card => {
+    console.log('handleCardClick', card);
+    this.setState({ card, isClickedOnCard: true });
+  };
+
+  // закрытие карты
+  handleClose = () => {
+    this.setState({ isClickedOnCard: false });
+  };
+
   render() {
-    const { data } = this.state;
+    const { data, isClickedOnCard, card } = this.state;
+
     return this.state.user === '' ? (
       <PopupLogin text="Введите свое имя:" closePopup={this.togglePopup} />
     ) : (
@@ -142,11 +159,23 @@ class App extends React.Component {
               list={list}
               onTitleChange={this.handleListTitleChange}
               onAddNewCard={this.handleAddCard}
-              removeCard={this.removeCard}
-              itemRenderer={card => <Card card={card} onCardChangeTitle={this.handleCardChangeTitle} />}
+              itemRenderer={card => (
+                <Card card={card} onCardChangeTitle={this.handleCardChangeTitle} onCardClick={this.handleCardClick} />
+              )}
             />
           )}
         />
+        {this.state.isClickedOnCard ? (
+          <PopupCard
+            item={card}
+            closePopup={this.handleClose}
+            onCardSubmitTitle={this.handleCardChangeTitle}
+            changeCard={this.changeCard}
+            removeCard={this.removeCard}
+          />
+        ) : (
+          ''
+        )}
         <pre>{JSON.stringify(this.state.data, 2, 2)}</pre>
       </div>
     );

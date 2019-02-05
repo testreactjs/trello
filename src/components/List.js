@@ -12,16 +12,14 @@ class List extends React.Component {
     const {
       list: { title },
     } = props;
-    console.log('props', props);
+    // console.log('props', props);
     this.state = { isClickedHeader: false, title, titleNewCard: '', isClickedAdd: false, titleLists: title };
-
-    // console.log(this.props);
   }
 
   // Add new card
   handleFooterAddSubmit = event => {
     event.preventDefault();
-    console.log('handleFooterAddSubmit');
+    // console.log('handleFooterAddSubmit');
     const { isClickedAdd } = this.state;
     const {
       onAddNewCard,
@@ -86,27 +84,6 @@ class List extends React.Component {
     });
   };
 
-  /*
-  onChangeCard = item => {
-    // console.log('TicketList.onChangeCard', item, this.props.list);
-    const cards = this.props.list.cards.map(value => {
-      if (value.id === item.id) {
-        return {
-          ...item,
-        };
-      }
-      return value;
-    });
-    const newList = this.props.list;
-    newList.cards = cards;
-    this.setState({ list: newList }, () => {
-      this.props.changeData(this.props.list.id, this.state.list);
-    });
-    // newList = [];
-    // this.props.changeData(this.props.list.id, this.state.list);
-  };
-*/
-  /*
   headTextFunc = title => {
     const headText = this.state.isClickedHeader ? (
       <form onSubmit={this.handleHeaderSubmit}>
@@ -128,30 +105,13 @@ class List extends React.Component {
 
     return headText;
   };
-*/
+
   render() {
     const { titleLists } = this.state;
     const {
       onAddNewCard,
       list: { id, title },
     } = this.props;
-    const headText = this.state.isClickedHeader ? (
-      <form onSubmit={this.handleHeaderSubmit}>
-        <input
-          ref={this.titleInputRef}
-          className="form-control"
-          type="text"
-          value={titleLists}
-          onChange={this.handleHeaderChange}
-          onBlur={this.handleHeaderSubmit}
-          required
-        />
-      </form>
-    ) : (
-      <h1 className="display-10" onClick={this.handleHeaderClick}>
-        {title}
-      </h1>
-    );
 
     const footerAdd = this.state.isClickedAdd ? (
       <div>
@@ -172,7 +132,7 @@ class List extends React.Component {
 
     return (
       <div className="col-sm bg-light m-3">
-        {headText}
+        {this.headTextFunc(titleLists)}
         {this.renderCards()}
         {footerAdd}
       </div>
