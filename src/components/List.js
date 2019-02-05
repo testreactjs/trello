@@ -43,7 +43,6 @@ class List extends React.Component {
     return cards.map(card => {
       return React.cloneElement(itemRenderer(card), {
         key: card.id,
-        idList: this.props.list.id,
       });
     });
   };

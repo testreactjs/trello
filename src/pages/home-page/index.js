@@ -2,10 +2,10 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import { v4 } from 'uuid';
+import { convertPatternsToTasks } from 'fast-glob/out/managers/tasks';
 import { List, Lists, PopupLogin, Card } from '../../components';
 import lists from '../../data.js';
 import { getData, saveData } from '../../storage';
-import PopupCard from '../../components/PopupCard';
 
 class App extends React.Component {
   constructor(props) {
@@ -16,7 +16,6 @@ class App extends React.Component {
       user: user || '',
       isClickedOnCard: false,
       card: {},
-      listId: '',
     };
   }
 
@@ -111,12 +110,14 @@ class App extends React.Component {
     this.setState({ card, isClickedOnCard: true, listId: idList });
   };
 
-  handleCardChangeTitle = title => {
-    const { data, listId, card } = this.state;
+  handleCardChangeTitle = (title, card, listId) => {
+    const { data } = this.state;
+    console.log('handleCardChangeTitle', card, title, listId);
     const updatedData = data.map(list => {
       const { id } = list;
       if (id === listId) {
         const { cards } = list;
+        console.log(cards);
         const newCards = cards.map(item => {
           if (item.id === card.id) {
             return { ...card, title };
@@ -127,11 +128,12 @@ class App extends React.Component {
       }
       return list;
     });
+    console.log('handleCardChangeTitle', updatedData);
     this.setState({ data: updatedData });
   };
 
-  handleCardChangeDescription = text => {
-    const { data, listId, card } = this.state;
+  handleCardChangeDescription = (text, card, listId) => {
+    const { data } = this.state;
     const updatedData = data.map(list => {
       const { id } = list;
       if (id === listId) {
@@ -149,9 +151,9 @@ class App extends React.Component {
     this.setState({ data: updatedData });
   };
 
-  handleAddComment = text => {
+  handleAddComment = (text, card, listId) => {
     console.log('handleAddComment');
-    const { data, listId, card } = this.state;
+    const { data } = this.state;
     const updatedData = data.map(list => {
       const { id } = list;
       if (id === listId) {
@@ -189,7 +191,7 @@ class App extends React.Component {
   };
 
   // закрытие карты
-  handleClose = () => {
+  handleClosePopupCard = () => {
     this.setState({ isClickedOnCard: false });
   };
 
@@ -197,9 +199,9 @@ class App extends React.Component {
     console.log('handleEditComment');
   };
 
-  handleDeleteComment = commentId => {
+  handleDeleteComment = (commentId, card, listId) => {
     console.log('handleDeleteComment');
-    const { data, listId, card } = this.state;
+    const { data, isClickedOnCard } = this.state;
     const updatedData = data.map(list => {
       const { id } = list;
       if (id === listId) {
@@ -211,6 +213,7 @@ class App extends React.Component {
           }
           return item;
         });
+        // this.setState({ card: newCards });
         return { ...list, cards: newCards };
       }
       return list;
@@ -219,8 +222,10 @@ class App extends React.Component {
     this.setState({ data: updatedData }, console.log(this.state.data));
   };
 
+  updateCardDescription = () => {};
+
   render() {
-    const { data, isClickedOnCard, card } = this.state;
+    const { data } = this.state;
     console.log('RENDER index.js');
     return this.state.user === '' ? (
       <PopupLogin text="Введите свое имя:" closePopup={this.togglePopup} />
@@ -243,26 +248,12 @@ class App extends React.Component {
               onTitleChange={this.handleListTitleChange}
               onAddNewCard={this.handleAddCard}
               itemRenderer={card => (
-                <Card card={card} onCardChangeTitle={this.handleCardChangeTitle} onCardClick={this.handleCardClick} />
+                <Card onSubmitDescription={text => this.handleCardChangeDescription(text, card, list.id)} card={card} />
               )}
             />
           )}
         />
-        {this.state.isClickedOnCard ? (
-          <PopupCard
-            item={card}
-            closePopup={this.handleClose}
-            onCardSubmitTitle={this.handleCardChangeTitle}
-            onCardSubmitDescription={this.handleCardChangeDescription}
-            onCardAddComment={this.handleAddComment}
-            onCardEditComment={this.handleEditComment}
-            onCardDeleteComment={this.handleDeleteComment}
-            onCardRemoveCard={this.handleRemoveCard}
-            changeCard={this.changeCard}
-          />
-        ) : (
-          ''
-        )}
+
         <pre>{JSON.stringify(this.state.data, 2, 2)}</pre>
       </div>
     );
