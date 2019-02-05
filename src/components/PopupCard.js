@@ -8,7 +8,6 @@ class PopupCard extends React.Component {
     super(props);
 
     const { item } = props;
-
     const { title, text } = props.item;
 
     this.state = {
@@ -91,7 +90,6 @@ class PopupCard extends React.Component {
 
   // Show comment after map comments
   showComment = (value, i) => {
-    const { data, onCardDeleteComment, onCardEditComment } = this.props;
     const { editComment } = this.state;
     const comment =
       editComment !== 0 && editComment === value.id ? (
@@ -156,10 +154,9 @@ class PopupCard extends React.Component {
   };
 
   render() {
-    const { title, text } = this.state;
-    const { onClose, onSubmitDescription, onCardAddComment, onCardRemoveCard } = this.props;
+    const { text } = this.state;
+    const { onClose } = this.props;
     const data = this.props.item;
-
     const styleButtonAddComment =
       this.state.comment === '' ? 'form-control btn btn-light mt-1 w-10' : 'form-control btn btn-success mt-1';
 
