@@ -1,34 +1,28 @@
 import React from 'react';
-import PopupCard from './PopupCard';
 
 class Card extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { isClicked: false };
-
-    console.log('Cards props', this.props);
-  }
-
+  /*
   renderCards = () => {
-    console.log('Card', this.props);
-    const { itemRenderer, list } = this.props;
-    const { cards } = list;
+    const {
+      itemRenderer,
+      list: { cards },
+    } = this.props;
+
     return cards.map(card => {
       return React.cloneElement(itemRenderer(card), {
         key: card.id,
       });
     });
   };
-
+*/
   handleLineClicked = e => {
-    this.props.onCardClick(this.props.card);
+    this.props.onCardClick(this.props.card, this.props.idList);
   };
 
   render() {
-    const { title } = this.props.card;
-    const { comments } = this.props.card;
+    // console.log('this.props Card', this.props);
 
+    const { title, comments } = this.props.card;
     return (
       <div className="alert alert-primary" onClick={this.handleLineClicked}>
         {title}

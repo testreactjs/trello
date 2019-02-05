@@ -13,6 +13,7 @@ class List extends React.Component {
       list: { title },
     } = props;
     // console.log('props', props);
+
     this.state = { isClickedHeader: false, title, titleNewCard: '', isClickedAdd: false, titleLists: title };
   }
 
@@ -37,9 +38,12 @@ class List extends React.Component {
   renderCards = () => {
     const { itemRenderer, list } = this.props;
     const { cards } = list;
+    // console.log('this.props List', this.props);
+    // console.log('Cards', this.props);
     return cards.map(card => {
       return React.cloneElement(itemRenderer(card), {
         key: card.id,
+        idList: this.props.list.id,
       });
     });
   };
@@ -64,7 +68,7 @@ class List extends React.Component {
 */
   // Change Title name
   handleHeaderChange = event => {
-    console.log('handleHeaderChange!', this.titleInputRef.current.value);
+    // console.log('handleHeaderChange!', this.titleInputRef.current.value);
     event.preventDefault();
     this.setState({ titleLists: this.titleInputRef.current.value });
   };

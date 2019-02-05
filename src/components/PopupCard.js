@@ -10,7 +10,7 @@ class PopupCard extends React.Component {
     const { item } = props;
     // doesnt work
     // {title, comments }
-    const title = item.title;
+    const { title, text } = props.item;
     // Doesnt Work, Why?
     // const {title} = item
     // console.log('PopupCard constructor', item);
@@ -23,7 +23,9 @@ class PopupCard extends React.Component {
       editComment: 0,
       textChangeComment: '',
       username: getData('username'),
+      text,
     };
+
     this.titleCardRef = React.createRef();
     this.textCardRef = React.createRef();
     this.commentCardRef = React.createRef();
@@ -41,29 +43,12 @@ class PopupCard extends React.Component {
 
   handleTitleSubmit = e => {
     e.preventDefault();
-    const item = Object.assign({}, this.state.data);
-    item.title = this.titleCardRef.current.value.trim() === '' ? '_' : this.titleCardRef.current.value;
-
-    this.setState({ title: item.title, isClickedHeader: false, data: item }, () => {
-      this.changeCard();
-    });
-
-    // console.log("this.state.data",this.state.data)
-  };
-
-  changeCard = () => {
-    // console.log('Изменяем данные changeCard', this.state.data);
-    this.props.changeCard(this.state.data);
+    this.props.onCardSubmitTitle(this.titleCardRef.current.value);
   };
 
   // Change description for card
   handleDescription = () => {
-    const item = Object.assign({}, this.state.data);
-    item.text = this.textCardRef.current.value;
-    // console.log(item, this.state.data)
-    this.setState({ data: item }, () => {
-      this.changeCard();
-    });
+    this.setState({ text: this.textCardRef.current.value });
   };
 
   // Add new comment
@@ -74,51 +59,24 @@ class PopupCard extends React.Component {
 
   handleButtonAddComment = e => {
     if (this.commentCardRef.current.value.trim() === '') return;
-    const list = Object.assign({}, this.state.data);
-    // console.log(this.state.data)
-    const comments = [...this.state.data.comments];
-    const lastId = comments.length > 0 ? comments[comments.length - 1].id : 1;
-    list.comments.push({
-      id: lastId + 1,
-      user: this.state.username,
-      text: this.commentCardRef.current.value.trim() === '' ? '_' : this.commentCardRef.current.value,
-    });
-    this.setState({ isClickedAdd: false, data: list, comment: '' }, () => {
-      this.changeCard();
-    });
-    // console.log(list)
-    // item.text = this.textCardRef.current.value;
-    // this.setState({data: item});
-    // this.changeCard();
+    const { comment } = this.state;
+    this.props.onCardAddComment(comment);
+    this.setState({ isClickedAdd: false, comment: '' });
   };
 
   // Delete comment
   handleClickDeleteComment = event => {
-    let list = Object.assign({}, this.state.data);
+    const list = Object.assign({}, this.state.data);
     // console.log(list, this.state.data, event.currentTarget.id);
     const comments = this.state.data.comments.filter(item => {
       return item.id != event.currentTarget.id;
     });
-    list.comments = comments;
-    // console.log(list, this.state.data);
-
-    // Hack! Тоже не работает
-    /*
-    let nextState = Object.assign({}, this.state, { data: list});
-    console.log(nextState);
-    this.setState(nextState);
-    */
-    this.setState({ data: list }, () => {
-      this.changeCard();
-    });
-
-    list = [];
-    // console.log(list, this.state.data);
   };
 
   handleClickChangeComment = event => {
     const comments = this.state.data.comments.filter(item => {
       return item.id != event.currentTarget.id;
+      console.log(comments);
     });
 
     if (comments.length != 0) {
@@ -193,7 +151,11 @@ class PopupCard extends React.Component {
     return (
       <div key={i} id={value.id} className="mt-3">
         <span className="h3">{value.user}:</span>
-        <button className="float-right btn btn-info" onClick={this.handleClickDeleteComment} id={value.id}>
+        <button
+          className="float-right btn btn-info"
+          onClick={() => this.props.onCardDeleteComment(value.id)}
+          id={value.id}
+        >
           Delete
         </button>
         <button id={value.id} className="float-right btn btn-info mr-1" onClick={this.handleClickChangeComment}>
@@ -205,7 +167,7 @@ class PopupCard extends React.Component {
   };
 
   render() {
-    const { title } = this.state;
+    const { title, text, data } = this.state;
     // const {comments} = this.state.data;
 
     const titleText = this.state.isClickedHeader ? (
@@ -228,7 +190,7 @@ class PopupCard extends React.Component {
 
     const styleButtonAddComment =
       this.state.comment === '' ? 'form-control btn btn-light mt-1 w-10' : 'form-control btn btn-success mt-1';
-    const { data } = this.state;
+
     console.log('Popup card render ', this.state.data);
     return (
       <div className="popup">
@@ -245,8 +207,8 @@ class PopupCard extends React.Component {
             ref={this.textCardRef}
             rows="3"
             className="form-control"
-            value={this.state.data.text}
-            onBlur={this.handleDescription}
+            value={text}
+            onBlur={() => this.props.onCardSubmitDescription(text)}
             onChange={this.handleDescription}
           />
           <label className="pt-3">Добавление комментария:</label>
@@ -262,8 +224,12 @@ class PopupCard extends React.Component {
             Добавить комментарий
           </button>
           <label className="pt-3">Комментарии:</label>
-          {/* data.comments.length != 0 ? data.comments.map(this.showComment) : ' Нет' */}
-          <button type="button" className="btn btn-secondary form-control mt-4" onClick={this.handleRemoveCard}>
+          {data.comments.length != 0 ? data.comments.map(this.showComment) : ' Нет'}
+          <button
+            type="button"
+            className="btn btn-secondary form-control mt-4"
+            onClick={() => this.props.onCardRemoveCard()}
+          >
             Удалить карточку
           </button>
         </div>
