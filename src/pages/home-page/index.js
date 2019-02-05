@@ -29,7 +29,7 @@ class App extends React.Component {
 
   // Change Title
   handleListTitleChange = (listId, title) => {
-    // console.log('handleListTitleChange ', listId, title);
+    console.log('handleListTitleChange ', listId, title);
     const { data } = this.state;
     const newData = data.map(dataItem => {
       if (dataItem.id === listId) {
@@ -74,7 +74,7 @@ class App extends React.Component {
   };
 
   handleAddCard = (listId, title) => {
-    console.log('handleAddCard', title);
+    console.log('handleAddCard!!!!', title);
     const { data } = this.state;
     const updatedData = data.map(list => {
       const { id } = list;

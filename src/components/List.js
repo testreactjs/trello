@@ -12,7 +12,8 @@ class List extends React.Component {
     const {
       list: { title },
     } = props;
-    this.state = { isClickedHeader: false, title, newCard: '', isClickedAdd: false };
+    console.log('props', props);
+    this.state = { isClickedHeader: false, title, titleNewCard: '', isClickedAdd: false, titleLists: title };
 
     // console.log(this.props);
   }
@@ -20,7 +21,19 @@ class List extends React.Component {
   // Add new card
   handleFooterAddSubmit = event => {
     event.preventDefault();
-    this.setState({ isClickedAdd: true , newCard: });
+    console.log('handleFooterAddSubmit');
+    const { isClickedAdd } = this.state;
+    const {
+      onAddNewCard,
+      list: { id, title },
+    } = this.props;
+
+    if (!isClickedAdd) {
+      this.setState({ isClickedAdd: true });
+    } else {
+      this.setState({ isClickedAdd: false });
+      return onAddNewCard(id, this.addInputRef.current.value);
+    }
   };
 
   renderCards = () => {
@@ -53,21 +66,24 @@ class List extends React.Component {
 */
   // Change Title name
   handleHeaderChange = event => {
-    // console.log('handleHeaderChange!');
+    console.log('handleHeaderChange!', this.titleInputRef.current.value);
     event.preventDefault();
-    this.setState({ title: this.titleInputRef.current.value });
+    this.setState({ titleLists: this.titleInputRef.current.value });
   };
 
   handleHeaderSubmit = event => {
     event.preventDefault();
-    this.setState({ title: this.titleInputRef.current.value, isClickedHeader: false });
-    // this.changeData();
     const { id } = this.props.list;
-    this.props.onTitleChange(id, this.state.title);
+    this.setState(
+      { titleLists: this.titleInputRef.current.value, isClickedHeader: false },
+      this.props.onTitleChange(id, this.state.titleLists),
+    );
   };
 
   handleHeaderClick = () => {
-    this.setState({ isClickedHeader: true });
+    this.setState({ isClickedHeader: true }, () => {
+      this.titleInputRef.current.focus();
+    });
   };
 
   /*
@@ -90,7 +106,7 @@ class List extends React.Component {
     // this.props.changeData(this.props.list.id, this.state.list);
   };
 */
-
+  /*
   headTextFunc = title => {
     const headText = this.state.isClickedHeader ? (
       <form onSubmit={this.handleHeaderSubmit}>
@@ -112,31 +128,39 @@ class List extends React.Component {
 
     return headText;
   };
-
+*/
   render() {
-    const { title: stateTitle } = this.state;
+    const { titleLists } = this.state;
     const {
       onAddNewCard,
       list: { id, title },
     } = this.props;
+    const headText = this.state.isClickedHeader ? (
+      <form onSubmit={this.handleHeaderSubmit}>
+        <input
+          ref={this.titleInputRef}
+          className="form-control"
+          type="text"
+          value={titleLists}
+          onChange={this.handleHeaderChange}
+          onBlur={this.handleHeaderSubmit}
+          required
+        />
+      </form>
+    ) : (
+      <h1 className="display-10" onClick={this.handleHeaderClick}>
+        {title}
+      </h1>
+    );
 
     const footerAdd = this.state.isClickedAdd ? (
       <div>
-        <form
-          onSubmit={() => {
-            onAddNewCard(id, stateTitle);
-          }}
-        >
+        <form onSubmit={this.handleFooterAddSubmit}>
           <div className="input-group">
             <input ref={this.addInputRef} className="form-control" type="text" onBlur={this.handleFooterAddSubmit} />
           </div>
         </form>
-        <button
-          onClick={() => {
-            onAddNewCard(id, stateTitle);
-          }}
-          className="btn btn-success mt-1 w-100"
-        >
+        <button onClick={this.handleFooterAddSubmit} className="btn btn-success mt-1 w-100">
           Добавить карточку
         </button>
       </div>
@@ -148,7 +172,7 @@ class List extends React.Component {
 
     return (
       <div className="col-sm bg-light m-3">
-        {this.headTextFunc(title)}
+        {headText}
         {this.renderCards()}
         {footerAdd}
       </div>
