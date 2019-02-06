@@ -1,6 +1,8 @@
 import React from 'react';
+import { convertPatternsToTasks } from 'fast-glob/out/managers/tasks';
 import Card from './Card';
 import Cards from './Cards';
+import EditableH3 from './widgets/EditableH3';
 import { getData } from '../storage';
 
 class List extends React.Component {
@@ -13,7 +15,7 @@ class List extends React.Component {
       list: { title },
     } = props;
 
-    this.state = { isClickedHeader: false, title, titleNewCard: '', isClickedAdd: false, titleLists: title };
+    this.state = { isClickedHeader: false, title, titleNewCard: '', isClickedAdd: false };
   }
 
   // Add new card
@@ -45,70 +47,15 @@ class List extends React.Component {
     });
   };
 
-  /*
-  // Удаление карточки
-  removeCard = idRemove => {
-    // console.log('removeCard this.state.list, idRemove', this.state.list, idRemove);
-    const list = this.state.list;
-    const cards = this.state.list.cards.filter(value => {
-      if (value.id != idRemove) {
-        return value;
-      }
-    });
-    list.cards = cards;
-
-    console.log('removeCard list', list);
-    this.setState({ list }, () => {
-      this.props.changeData(this.props.list.id, this.state.list);
-    });
-  };
-*/
   // Change Title name
-  handleHeaderChange = event => {
-    // console.log('handleHeaderChange!', this.titleInputRef.current.value);
-    event.preventDefault();
-    this.setState({ titleLists: this.titleInputRef.current.value });
-  };
-
-  handleHeaderSubmit = event => {
-    event.preventDefault();
+  handleTitleChange = title => {
     const { id } = this.props.list;
-    this.setState(
-      { titleLists: this.titleInputRef.current.value, isClickedHeader: false },
-      this.props.onTitleChange(id, this.state.titleLists),
-    );
-  };
-
-  handleHeaderClick = () => {
-    this.setState({ isClickedHeader: true }, () => {
-      this.titleInputRef.current.focus();
-    });
-  };
-
-  headTextFunc = title => {
-    const headText = this.state.isClickedHeader ? (
-      <form onSubmit={this.handleHeaderSubmit}>
-        <input
-          ref={this.titleInputRef}
-          className="form-control"
-          type="text"
-          value={title}
-          onChange={this.handleHeaderChange}
-          onBlur={this.handleHeaderSubmit}
-          required
-        />
-      </form>
-    ) : (
-      <h1 className="display-10" onClick={this.handleHeaderClick}>
-        {title}
-      </h1>
-    );
-
-    return headText;
+    const { onAddNewCard } = this.props;
+    // console.log('handleTitleChange', title, id);
+    return this.props.onTitleChange(id, title);
   };
 
   render() {
-    const { titleLists } = this.state;
     const {
       onAddNewCard,
       list: { id, title },
@@ -133,7 +80,7 @@ class List extends React.Component {
 
     return (
       <div className="col-sm bg-light m-3">
-        {this.headTextFunc(titleLists)}
+        <EditableH3 title={title} onChange={this.handleTitleChange} />
         {this.renderCards()}
         {footerAdd}
       </div>

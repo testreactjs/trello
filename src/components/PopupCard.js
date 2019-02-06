@@ -1,45 +1,42 @@
 import React from 'react';
 import './styles.css';
-
+import EditableH3 from './widgets/EditableH3';
 import { getData } from '../storage';
+import Comments from './Comments';
 
 class PopupCard extends React.Component {
   constructor(props) {
     super(props);
 
-    const { item } = props;
-    const { title, text } = props.item;
+    const { data } = props;
+
+    const { title, text } = props.data;
 
     this.state = {
       isClickedHeader: false, // click on title
       title,
-      data: item,
-      comment: '',
-      editComment: 0,
-      textChangeComment: '',
+      data,
+
       username: getData('username'),
       text,
     };
 
-    this.titleCardRef = React.createRef();
     this.textCardRef = React.createRef();
     this.commentCardRef = React.createRef();
-    this.changeElement = React.createRef();
   }
 
-  handleTitleChange = () => {
-    this.setState({ title: this.titleCardRef.current.value });
-  };
-
-  handleTitleSubmit = e => {
-    e.preventDefault();
-    this.setState({ isClickedHeader: false });
-    this.props.onCardSubmitTitle(this.titleCardRef.current.value);
+  handleTitleSubmit = title => {
+    this.props.onCardSubmitTitle(title);
   };
 
   // Change description for card
   handleDescription = () => {
     this.setState({ text: this.textCardRef.current.value });
+  };
+
+  handleSubmitDescription = e => {
+    const { onSubmitDescription } = this.props;
+    onSubmitDescription(e.target.value);
   };
 
   // Add new comment
@@ -54,109 +51,10 @@ class PopupCard extends React.Component {
     this.setState({ isClickedAdd: false, comment: '' });
   };
 
-  handleClickChangeComment = event => {
-    const { comments } = this.state.data;
-
-    // console.log('tempComments', tempComments);
-    if (comments.length !== 0) {
-      this.setState({ textChangeComment: comments[0].text });
-    }
-    this.setState({ editComment: event.currentTarget.id });
-    // console.log('tempComments', comments[0].text, event.currentTarget.id );
-  };
-
-  handleChangeClickComment = () => {
-    this.setState({ textChangeComment: this.changeElement.current.value });
-  };
-
-  handleChangeComment = event => {
-    // event.currentTarget.id
-    event.preventDefault();
-    this.setState({ textChangeComment: this.changeElement.current.value });
-  };
-
-  handleSaveEditedComment = event => {
-    const { editComment } = this.state;
-    if (editComment !== 0) {
-      this.props.onCardEditComment(this.changeElement.current.value, editComment);
-      this.setState({ editComment: 0 });
-    }
-  };
-
-  handleSubmitDescription = e => {
-    const { onSubmitDescription } = this.props;
-    onSubmitDescription(e.target.value);
-  };
-
-  // Show comment after map comments
-  showComment = (value, i) => {
-    const { editComment } = this.state;
-    const comment =
-      editComment !== 0 && editComment === value.id ? (
-        <div>
-          <textarea
-            key={i}
-            ref={this.changeElement}
-            id={value.id}
-            className="form-control mt-2"
-            value={this.state.textChangeComment}
-            onClick={this.handleChangeClickComment}
-            onChange={this.handleChangeComment}
-            onBlur={this.handleSaveEditedComment}
-          />
-          <button className="form-control btn btn-secondary" onClick={this.handleSaveEditedComment} id={value.id}>
-            Save
-          </button>
-        </div>
-      ) : (
-        <div key={i} className="form-control mt-2">
-          {value.text}
-        </div>
-      );
-
-    return (
-      <div key={i} id={value.id} className="mt-3">
-        <span className="h3">{value.user}:</span>
-        <button
-          className="float-right btn btn-info"
-          onClick={() => this.props.onCardDeleteComment(value.id)}
-          id={value.id}
-        >
-          Delete
-        </button>
-        <button id={value.id} className="float-right btn btn-info mr-1" onClick={this.handleClickChangeComment}>
-          Edit
-        </button>
-        {comment}
-      </div>
-    );
-  };
-
-  showTitle = () => {
-    const { title } = this.state;
-    return this.state.isClickedHeader ? (
-      <form onSubmit={this.handleTitleSubmit}>
-        <input
-          ref={this.titleCardRef}
-          value={title}
-          type="text"
-          onBlur={this.handleTitleSubmit}
-          required
-          className="form-control"
-          onChange={this.handleTitleChange}
-        />
-      </form>
-    ) : (
-      <h3 className="display-10" onClick={() => this.setState({ isClickedHeader: true })}>
-        {title}
-      </h3>
-    );
-  };
-
   render() {
-    const { text } = this.state;
-    const { onClose } = this.props;
-    const data = this.props.item;
+    const { text, title } = this.state;
+    const { onClose, data } = this.props;
+    // console.log(data);
     const styleButtonAddComment =
       this.state.comment === '' ? 'form-control btn btn-light mt-1 w-10' : 'form-control btn btn-success mt-1';
 
@@ -171,7 +69,7 @@ class PopupCard extends React.Component {
           >
             Close
           </button>
-          {this.showTitle()}
+          <EditableH3 title={title} onChange={this.handleTitleSubmit} />
           <div>
             Создал: <b>{data.user}</b>
           </div>
@@ -197,7 +95,15 @@ class PopupCard extends React.Component {
             Добавить комментарий
           </button>
           <label className="pt-3">Комментарии:</label>
-          {data.comments.length != 0 ? data.comments.map(this.showComment) : ' Нет'}
+          {data.comments.length === 0 ? (
+            ' Нет'
+          ) : (
+            <Comments
+              data={data.comments}
+              onEdit={(text, id) => this.props.onCardEditComment(text, id)}
+              onDelete={id => this.props.onCardDeleteComment(id)}
+            />
+          )}
           <button
             type="button"
             className="btn btn-secondary form-control mt-4"
