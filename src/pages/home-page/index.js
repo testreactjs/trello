@@ -5,6 +5,7 @@ import { v4 } from 'uuid';
 import { List, Lists, PopupLogin, Card } from '../../components';
 import lists from '../../data';
 import { getData, saveData } from '../../storage';
+import { getComments } from '../../selectors';
 
 class App extends React.Component {
   constructor(props) {
@@ -126,7 +127,7 @@ class App extends React.Component {
   };
 
   // Del card
-  handleRemoveCard = (card, listId) => {
+  handleRemoveCard = (cardId, listId) => {
     const { data } = this.state;
     const updatedData = data.map(list => {
       const { id } = list;
@@ -219,8 +220,7 @@ class App extends React.Component {
                   onCardAddComment={text => this.handleAddComment(text, card, list.id)}
                   onCardEditComment={(text, id) => this.handleEditComment(text, id, card, list.id)}
                   onCardDeleteComment={id => this.handleDeleteComment(id, card, list.id)}
-                  onCardRemoveCard={id => this.handleRemoveCard(card, list.id)}
-                  onClose={e => this.handleClosePopupCard()}
+                  onCardRemoveCard={cardId => this.handleRemoveCard(cardId, list.id)}
                   card={card}
                 />
               )}
