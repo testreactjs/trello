@@ -7,11 +7,9 @@ class Comments extends React.Component {
       id: '',
       text: '',
     };
-    this.changeElement = React.createRef();
   }
 
   handleClickChangeComment = event => {
-    const { data } = this.props;
     this.setState({ id: event.currentTarget.id });
   };
 
@@ -20,7 +18,6 @@ class Comments extends React.Component {
   };
 
   handleChangeComment = event => {
-    // event.currentTarget.id
     this.setState({ text: event.target.value });
   };
 
@@ -36,7 +33,6 @@ class Comments extends React.Component {
   showComment = (value, i) => {
     const { id } = this.state;
     const text = this.state.text === '' ? value.text : this.state.text;
-
     const comment =
       id === value.id ? (
         <div>

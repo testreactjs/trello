@@ -12,17 +12,17 @@ class PopupCard extends React.Component {
 
     const { title, text } = props.data;
 
+    /*
+    title - name card
+    text - description
+    comment - new comment
+    */
     this.state = {
-      isClickedHeader: false, // click on title
       title,
-      data,
-
       username: getData('username'),
       text,
+      comment: '',
     };
-
-    this.textCardRef = React.createRef();
-    this.commentCardRef = React.createRef();
   }
 
   handleTitleSubmit = title => {
@@ -30,31 +30,31 @@ class PopupCard extends React.Component {
   };
 
   // Change description for card
-  handleDescription = () => {
-    this.setState({ text: this.textCardRef.current.value });
+  handleDescription = e => {
+    this.setState({ text: e.target.value });
   };
 
   handleSubmitDescription = e => {
     const { onSubmitDescription } = this.props;
-    onSubmitDescription(e.target.value);
+    const { text } = this.state;
+    onSubmitDescription(text);
   };
 
   // Add new comment
-  handleTextareaComment = () => {
-    this.setState({ comment: this.commentCardRef.current.value });
+  handleTextareaComment = e => {
+    this.setState({ comment: e.target.value });
   };
 
-  handleButtonAddComment = e => {
-    if (this.commentCardRef.current.value.trim() === '') return;
+  handleButtonAddComment = () => {
     const { comment } = this.state;
+    if (comment.trim() === '') return;
     this.props.onCardAddComment(comment);
     this.setState({ isClickedAdd: false, comment: '' });
   };
 
   render() {
-    const { text, title } = this.state;
+    const { text, title, comment } = this.state;
     const { onClose, data } = this.props;
-    // console.log(data);
     const styleButtonAddComment =
       this.state.comment === '' ? 'form-control btn btn-light mt-1 w-10' : 'form-control btn btn-success mt-1';
 
@@ -75,7 +75,6 @@ class PopupCard extends React.Component {
           </div>
           <label className="pt-3">Описание:</label>
           <textarea
-            ref={this.textCardRef}
             rows="3"
             className="form-control"
             value={text}
@@ -84,10 +83,9 @@ class PopupCard extends React.Component {
           />
           <label className="pt-3">Добавление комментария:</label>
           <textarea
-            ref={this.commentCardRef}
             rows="3"
             className="form-control"
-            value={this.state.comment}
+            value={comment}
             onBlur={this.handleTextareaComment}
             onChange={this.handleTextareaComment}
           />
