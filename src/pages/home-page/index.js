@@ -22,13 +22,16 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     const user = getData('username');
+    // const { data } = this.state;
+    const mappedData = getList({
+      users: fakeUsers,
+      lists: fakeLists,
+      cards: fakeCards,
+      comments: fakeComments,
+    });
+
     this.state = {
-      data: {
-        users: fakeUsers,
-        lists: fakeLists,
-        cards: fakeCards,
-        comments: fakeComments,
-      },
+      data: mappedData,
       user: user || '',
     };
   }
@@ -63,7 +66,8 @@ class App extends React.Component {
       const { id } = list;
       if (id === listId) {
         const { cards } = list;
-        return { ...list, cards: [...cards, { id: v4(), title, text: '', user: getData('username'), comments: [] }] };
+        const idCard = v4();
+        return { ...list, cards: [...cards, { listId, id: idCard, title, text: '', user: [], comments: [] }] };
       }
       return list;
     });
@@ -129,7 +133,19 @@ class App extends React.Component {
         const { cards } = list;
         const newCards = cards.map(item => {
           if (item.id === card.id) {
-            const comments = [...item.comments, { id: v4(), text, user: getData('username') }];
+            const comments = [
+              ...item.comments,
+              {
+                id: v4(),
+                text,
+                user: {
+                  id: 100000,
+                  firstName: 'Ivan',
+                  surname: 'Ivanov',
+                  avatar: 'https://www.w3schools.com/howto/img_avatar.png',
+                },
+              },
+            ];
             return { ...card, comments };
           }
           return item;
@@ -143,12 +159,14 @@ class App extends React.Component {
 
   // Del card
   handleRemoveCard = (cardId, listId) => {
+    // console.log(cardId, listId);
     const { data } = this.state;
     const updatedData = data.map(list => {
       const { id } = list;
       if (id === listId) {
         const { cards } = list;
-        const newCards = cards.filter(item => item.id !== card.id);
+        console.log('cards', cards);
+        const newCards = cards.filter(item => item.id !== cardId);
         return { ...list, cards: newCards };
       }
       return list;
@@ -158,6 +176,7 @@ class App extends React.Component {
 
   // change comment
   handleEditComment = (text, idComment, card, listId) => {
+    // console.log('handleEditComment', text, idComment, card, listId);
     const { data } = this.state;
     const updatedData = data.map(list => {
       const { id } = list;
@@ -167,8 +186,8 @@ class App extends React.Component {
           if (item.id === card.id) {
             const comments = item.comments.map(value => {
               // console.log('Rvalue.id === idComment', value.id, idComment);
-              if (value.id === idComment) {
-                // console.log('Return', { idComment, text, user: value.user });
+              if (value.id == idComment) {
+                // console.log('Return', { idComment, text, user: value.user, text });
                 return { id: idComment, text, user: value.user };
               }
               return value;
@@ -207,8 +226,6 @@ class App extends React.Component {
   };
 
   render() {
-    const { data } = this.state;
-    const mappedData = getList(data);
     return this.state.user === '' ? (
       <PopupLogin text="Введите свое имя:" closePopup={this.togglePopup} />
     ) : (
@@ -223,7 +240,7 @@ class App extends React.Component {
           </p>
         </div>
         <Lists
-          lists={mappedData}
+          lists={this.state.data}
           itemRenderer={list => (
             <List
               list={list}
@@ -236,18 +253,18 @@ class App extends React.Component {
                   onCardAddComment={text => this.handleAddComment(text, card, list.id)}
                   onCardEditComment={(text, id) => this.handleEditComment(text, id, card, list.id)}
                   onCardDeleteComment={id => this.handleDeleteComment(id, card, list.id)}
-                  onCardRemoveCard={cardId => this.handleRemoveCard(cardId, list.id)}
+                  onCardRemoveCard={cardId => this.handleRemoveCard(card.id, list.id)}
                   card={card}
                 />
               )}
             />
           )}
         />
-
-        <pre>{JSON.stringify(this.state.data, 2, 2)}</pre>
       </div>
     );
   }
 }
-
+/*
+        <pre>{JSON.stringify(this.state.data, 2, 2)}</pre>
+        */
 export default App;

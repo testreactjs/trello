@@ -5,12 +5,14 @@ class Comments extends React.Component {
     super(props);
     this.state = {
       id: '',
+      comment: '',
       text: '',
     };
   }
 
   handleClickChangeComment = event => {
     this.setState({ id: event.currentTarget.id });
+    // console.log(event.currentTarget.id);
   };
 
   handleChangeClickComment = event => {
@@ -32,9 +34,14 @@ class Comments extends React.Component {
   // Show comment after map comments
   showComment = (value, i) => {
     const { id } = this.state;
+
+    const {
+      user: { avatar, firstName, surname },
+    } = value;
+    // console.log('id this.state.id', typeof id, typeof this.state.id);
     const text = this.state.text === '' ? value.text : this.state.text;
     const comment =
-      id === value.id ? (
+      id == value.id ? (
         <div>
           <textarea
             key={value.id}
@@ -57,7 +64,10 @@ class Comments extends React.Component {
 
     return (
       <div key={i} id={value.id} className="mt-3">
-        <span className="h3">{value.user}:</span>
+        <span className="h3">
+          <img src={avatar} width="20" />
+          {firstName} {surname} :
+        </span>
         <button className="float-right btn btn-info" onClick={() => this.props.onDelete(value.id)} id={value.id}>
           Delete
         </button>
@@ -71,7 +81,7 @@ class Comments extends React.Component {
 
   render() {
     const { data } = this.props;
-    console.log(this.state);
+    // console.log('render comments');
     return data.map(this.showComment);
   }
 }

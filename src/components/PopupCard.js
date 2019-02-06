@@ -15,9 +15,9 @@ class PopupCard extends React.Component {
     text - description
     comment - add comment
     */
+    console.log('PopupCard', props);
     this.state = {
       title,
-      username: getData('username'),
       text,
       comment: '',
     };
@@ -52,7 +52,10 @@ class PopupCard extends React.Component {
 
   render() {
     const { text, title, comment } = this.state;
-    const { onClose, data } = this.props;
+
+    const { onClose, data, id } = this.props;
+
+    const { firstName, surname, avatar } = data.user;
     const styleButtonAddComment =
       this.state.comment === '' ? 'form-control btn btn-light mt-1 w-10' : 'form-control btn btn-success mt-1';
 
@@ -69,7 +72,11 @@ class PopupCard extends React.Component {
           </button>
           <EditableH3 title={title} onChange={this.handleTitleSubmit} />
           <div>
-            Создал: <b>{data.user}</b>
+            Создал:{' '}
+            <b>
+              <img src={avatar} height="25" />
+              {firstName} {surname}
+            </b>
           </div>
           <label className="pt-3">Описание:</label>
           <textarea
@@ -103,7 +110,7 @@ class PopupCard extends React.Component {
           <button
             type="button"
             className="btn btn-secondary form-control mt-4"
-            onClick={() => this.props.onCardRemoveCard()}
+            onClick={() => this.props.onCardRemoveCard(id)}
           >
             Удалить карточку
           </button>
