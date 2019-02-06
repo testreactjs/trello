@@ -5,14 +5,30 @@ import { v4 } from 'uuid';
 import { List, Lists, PopupLogin, Card } from '../../components';
 import lists from '../../data';
 import { getData, saveData } from '../../storage';
-import { getComments } from '../../selectors';
+import { usersSelector, getList, commentsSelector, listsSelector, cardsSelector } from '../../selectors';
+import { listFactory, userFactory, cardFactory, commentFactory } from '../../factories';
 
+const fakeLists = listFactory(10);
+const fakeUsers = userFactory(20);
+const fakeCards = cardFactory(200, {
+  listId: fakeLists,
+  userId: fakeUsers,
+});
+const fakeComments = commentFactory(2000, {
+  userId: fakeUsers,
+  cardId: fakeCards,
+});
 class App extends React.Component {
   constructor(props) {
     super(props);
     const user = getData('username');
     this.state = {
-      data: lists,
+      data: {
+        users: fakeUsers,
+        lists: fakeLists,
+        cards: fakeCards,
+        comments: fakeComments,
+      },
       user: user || '',
     };
   }
@@ -42,7 +58,6 @@ class App extends React.Component {
   };
 
   handleAddCard = (listId, title) => {
-    console.log('handleAddCard!!!!', title);
     const { data } = this.state;
     const updatedData = data.map(list => {
       const { id } = list;
@@ -193,6 +208,7 @@ class App extends React.Component {
 
   render() {
     const { data } = this.state;
+    const mappedData = getList(data);
     return this.state.user === '' ? (
       <PopupLogin text="Введите свое имя:" closePopup={this.togglePopup} />
     ) : (
@@ -207,7 +223,7 @@ class App extends React.Component {
           </p>
         </div>
         <Lists
-          lists={data}
+          lists={mappedData}
           itemRenderer={list => (
             <List
               list={list}
