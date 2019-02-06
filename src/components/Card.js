@@ -35,7 +35,7 @@ class Card extends React.Component {
       <section>
         {isShowingModal && (
           <PopupCard
-            data={card}
+            card={card}
             onCardSubmitTitle={onCardSubmitTitle}
             onCardAddComment={onCardAddComment}
             onCardEditComment={onCardEditComment}

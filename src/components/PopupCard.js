@@ -8,14 +8,13 @@ class PopupCard extends React.Component {
   constructor(props) {
     super(props);
 
-    const { title, text } = props.data;
+    const { title, text } = props.card;
 
     /*
     title - name
     text - description
     comment - add comment
     */
-    console.log('PopupCard', props);
     this.state = {
       title,
       text,
@@ -51,11 +50,16 @@ class PopupCard extends React.Component {
   };
 
   render() {
-    const { text, title, comment } = this.state;
+    const { comment } = this.state;
 
-    const { onClose, data, id } = this.props;
+    const {
+      onClose,
+      card: { user, title, text, comments },
+      id,
+    } = this.props;
 
-    const { firstName, surname, avatar } = data.user;
+    const { firstName, surname, avatar } = user;
+
     const styleButtonAddComment =
       this.state.comment === '' ? 'form-control btn btn-light mt-1 w-10' : 'form-control btn btn-success mt-1';
 
@@ -98,11 +102,11 @@ class PopupCard extends React.Component {
             Добавить комментарий
           </button>
           <label className="pt-3">Комментарии:</label>
-          {data.comments.length === 0 ? (
+          {comments.length === 0 ? (
             ' Нет'
           ) : (
             <Comments
-              data={data.comments}
+              data={comments}
               onEdit={(text, id) => this.props.onCardEditComment(text, id)}
               onDelete={id => this.props.onCardDeleteComment(id)}
             />

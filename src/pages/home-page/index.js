@@ -23,17 +23,17 @@ class App extends React.Component {
     super(props);
     const user = getData('username');
     // const { data } = this.state;
-    const mappedData = getList({
-      users: fakeUsers,
-      lists: fakeLists,
-      cards: fakeCards,
-      comments: fakeComments,
-    });
 
     this.state = {
-      data: mappedData,
+      data: {
+        users: fakeUsers,
+        lists: fakeLists,
+        cards: fakeCards,
+        comments: fakeComments,
+      },
       user: user || '',
     };
+    console.log(this.state.data);
   }
 
   // Logout
@@ -43,21 +43,22 @@ class App extends React.Component {
 
   // Change Title
   handleListTitleChange = (listId, title) => {
-    const { data } = this.state;
-    const newData = data.map(dataItem => {
-      if (dataItem.id === listId) {
+    const {
+      data: { lists: listsFromState },
+    } = this.state;
+    const lists = listsFromState.map(list => {
+      if (list.id === listId) {
         return {
-          ...dataItem,
+          ...list,
           title,
         };
       }
-      return dataItem;
-    });
-    this.setState({
-      data: newData,
+      return list;
     });
 
-    // console.log("newData", newData);
+    this.setState({
+      data: { ...this.state.data, lists },
+    });
   };
 
   handleAddCard = (listId, title) => {
@@ -86,46 +87,42 @@ class App extends React.Component {
     this.setState({ card, isClickedOnCard: true });
   };
 
-  handleCardChangeTitle = (title, card, listId) => {
-    const { data } = this.state;
-    const updatedData = data.map(list => {
-      const { id } = list;
-      if (id === listId) {
-        const { cards } = list;
-        const newCards = cards.map(item => {
-          if (item.id === card.id) {
-            return { ...card, title };
-          }
-          return item;
-        });
-        return { ...list, cards: newCards };
+  handleCardChangeTitle = (title, id) => {
+    const {
+      data: { cards: cardsFromState },
+    } = this.state;
+    const cards = cardsFromState.map(card => {
+      if (id === card.id) {
+        return { ...card, title };
       }
-      return list;
+      return card;
     });
-    this.setState({ data: updatedData });
+    this.setState({ data: { ...this.state.data, cards } });
   };
 
-  handleCardChangeDescription = (text, card, listId) => {
-    const { data } = this.state;
-    const updatedData = data.map(list => {
-      const { id } = list;
-      if (id === listId) {
-        const { cards } = list;
-        const newCards = cards.map(item => {
-          if (item.id === card.id) {
-            return { ...card, text };
-          }
-          return item;
-        });
-        return { ...list, cards: newCards };
+  // changed!!
+  handleCardChangeDescription = (text, cardId) => {
+    const {
+      data: { cards: cardsFromState },
+    } = this.state;
+    const cards = cardsFromState.map(card => {
+      if (cardId === card.id) {
+        return { ...card, text };
       }
-      return list;
+      return card;
     });
-    this.setState({ data: updatedData });
+
+    this.setState({ date: { ...this.state.data, cards } });
   };
 
   // Add new comment
-  handleAddComment = (text, card, listId) => {
+  // changing
+  handleAddComment = (text, cardId) => {
+    const {
+      data: { comments: commentsFromState },
+    } = this.state;
+
+    /*
     const { data } = this.state;
     const updatedData = data.map(list => {
       const { id } = list;
@@ -155,6 +152,7 @@ class App extends React.Component {
       return list;
     });
     this.setState({ data: updatedData });
+    */
   };
 
   // Del card
@@ -226,6 +224,9 @@ class App extends React.Component {
   };
 
   render() {
+    const { data } = this.state;
+    const mappedData = getList(data);
+
     return this.state.user === '' ? (
       <PopupLogin text="Введите свое имя:" closePopup={this.togglePopup} />
     ) : (
@@ -240,7 +241,7 @@ class App extends React.Component {
           </p>
         </div>
         <Lists
-          lists={this.state.data}
+          lists={mappedData}
           itemRenderer={list => (
             <List
               list={list}
@@ -248,12 +249,12 @@ class App extends React.Component {
               onAddNewCard={this.handleAddCard}
               itemRenderer={card => (
                 <Card
-                  onCardSubmitTitle={title => this.handleCardChangeTitle(title, card, list.id)}
-                  onSubmitDescription={text => this.handleCardChangeDescription(text, card, list.id)}
-                  onCardAddComment={text => this.handleAddComment(text, card, list.id)}
-                  onCardEditComment={(text, id) => this.handleEditComment(text, id, card, list.id)}
-                  onCardDeleteComment={id => this.handleDeleteComment(id, card, list.id)}
-                  onCardRemoveCard={cardId => this.handleRemoveCard(card.id, list.id)}
+                  onCardSubmitTitle={title => this.handleCardChangeTitle(title, card.id)}
+                  onSubmitDescription={text => this.handleCardChangeDescription(text, card.id)}
+                  onCardAddComment={text => this.handleAddComment(text, card.id)}
+                  onCardEditComment={(text, id) => this.handleEditComment(text, id, card.id)}
+                  onCardDeleteComment={id => this.handleDeleteComment(id, card.id)}
+                  onCardRemoveCard={cardId => this.handleRemoveCard(card.id)}
                   card={card}
                 />
               )}
