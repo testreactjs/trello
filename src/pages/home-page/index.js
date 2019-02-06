@@ -153,7 +153,7 @@ class App extends React.Component {
               // console.log('Rvalue.id === idComment', value.id, idComment);
               if (value.id === idComment) {
                 // console.log('Return', { idComment, text, user: value.user });
-                return { idComment, text, user: value.user };
+                return { id: idComment, text, user: value.user };
               }
               return value;
             });

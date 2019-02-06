@@ -8,14 +8,12 @@ class PopupCard extends React.Component {
   constructor(props) {
     super(props);
 
-    const { data } = props;
-
     const { title, text } = props.data;
 
     /*
-    title - name card
+    title - name
     text - description
-    comment - new comment
+    comment - add comment
     */
     this.state = {
       title,

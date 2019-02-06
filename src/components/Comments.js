@@ -24,8 +24,8 @@ class Comments extends React.Component {
   handleSaveEditedComment = event => {
     const { text } = this.state;
     if (text !== '') {
-      this.props.onEdit(text, event.currentTarget.id);
       this.setState({ id: '', text: '' });
+      this.props.onEdit(text, event.currentTarget.id);
     }
   };
 
@@ -38,7 +38,6 @@ class Comments extends React.Component {
         <div>
           <textarea
             key={value.id}
-            ref={this.changeElement}
             id={value.id}
             className="form-control mt-2"
             value={text}
@@ -72,6 +71,7 @@ class Comments extends React.Component {
 
   render() {
     const { data } = this.props;
+    console.log(this.state);
     return data.map(this.showComment);
   }
 }
