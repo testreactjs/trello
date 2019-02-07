@@ -106,7 +106,7 @@ class PopupCard extends React.Component {
             ' Нет'
           ) : (
             <Comments
-              data={comments}
+              comments={comments}
               onEdit={(text, id) => this.props.onCardEditComment(text, id)}
               onDelete={id => this.props.onCardDeleteComment(id)}
             />

@@ -14,7 +14,7 @@ class Comments extends React.Component {
     // console.log(event.currentTarget.id);
   };
 
-  handleSaveEditedComment = event => {
+  handleSaveEditedComment = () => {
     const text = this.commentRef.current.value;
     if (text !== '') {
       this.setState({ id: '' });
@@ -23,54 +23,58 @@ class Comments extends React.Component {
   };
 
   // Show comment after map comments
-  showComment = (value, i) => {
+  showComment = (comment, i) => {
     const { id } = this.state;
     const {
       user: { avatar, firstName, surname },
-    } = value;
+    } = comment;
     // console.log('id this.state.id', typeof id, typeof this.state.id);
-    const comment =
-      id == value.id ? (
+    const elemComment =
+      id == comment.id ? (
         <div>
           <textarea
             ref={this.commentRef}
-            key={value.id}
-            id={value.id}
+            key={comment.id}
+            id={comment.id}
             className="form-control mt-2"
-            defaultValue={value.text}
+            defaultValue={comment.text}
             onBlur={this.handleSaveEditedComment}
           />
-          <button className="form-control btn btn-secondary" onClick={this.handleSaveEditedComment} id={value.id}>
+          <button
+            className="form-control btn btn-secondary"
+            onClick={() => this.handleSaveEditedComment()}
+            id={comment.id}
+          >
             Save
           </button>
         </div>
       ) : (
-        <div key={value.id} className="form-control mt-2">
-          {value.text}
+        <div key={comment.id} className="form-control mt-2">
+          {comment.text}
         </div>
       );
 
     return (
-      <div key={value.id} id={value.id} className="mt-3">
+      <div key={comment.id} id={comment.id} className="mt-3">
         <span className="h3">
           <img src={avatar} width="20" />
           {firstName} {surname} :
         </span>
-        <button className="float-right btn btn-info" onClick={() => this.props.onDelete(value.id)} id={value.id}>
+        <button className="float-right btn btn-info" onClick={() => this.props.onDelete(comment.id)} id={comment.id}>
           Delete
         </button>
-        <button id={value.id} className="float-right btn btn-info mr-1" onClick={this.handleClickChangeComment}>
+        <button id={comment.id} className="float-right btn btn-info mr-1" onClick={this.handleClickChangeComment}>
           Edit
         </button>
-        {comment}
+        {elemComment}
       </div>
     );
   };
 
   render() {
-    const { data } = this.props;
+    const { comments } = this.props;
     // console.log('render comments');
-    return data.map(this.showComment);
+    return comments.map(this.showComment);
   }
 }
 
