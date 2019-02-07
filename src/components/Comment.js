@@ -13,12 +13,11 @@ class Comment extends React.Component {
     });
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
+  handleSubmit = id => {
     const text = this.commentRef.current.value;
 
     if (text !== '') {
-      this.setState({ isClickedHeader: false }, this.props.onChange(text, this.commentRef.current.id));
+      this.setState({ isClickedHeader: false }, this.props.onChange(text, id));
     }
   };
 
@@ -38,34 +37,30 @@ class Comment extends React.Component {
         <button className="float-right btn btn-info" onClick={() => this.props.onDelete(id)}>
           Delete
         </button>
-        <button id={id} className="float-right btn btn-info mr-1" onClick={() => this.handleChange()}>
+        <button className="float-right btn btn-info mr-1" onClick={() => this.handleChange()}>
           Edit
         </button>
       </section>
     );
     return isClickedHeader ? (
-      <div key={id} className="mt-3">
+      <div className="mt-3">
         {headComment}
         <div>
           <textarea
-            id={id}
             ref={this.commentRef}
-            key={id}
             className="form-control mt-2"
             defaultValue={text}
             onBlur={this.handleSaveEditedComment}
           />
-          <button className="form-control btn btn-secondary" onClick={() => this.handleSubmit(event)}>
+          <button className="form-control btn btn-secondary" onClick={() => this.handleSubmit(id)}>
             Save
           </button>
         </div>
       </div>
     ) : (
-      <div key={id} className="mt-3">
+      <div className="mt-3">
         {headComment}
-        <div key={id} className="form-control mt-2">
-          {text}
-        </div>
+        <div className="form-control mt-2">{text}</div>
       </div>
     );
   }

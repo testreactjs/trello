@@ -20,7 +20,7 @@ class List extends React.Component {
     const { isClickedAdd } = this.state;
     const {
       onAddNewCard,
-      list: { id, title },
+      list: { id },
     } = this.props;
 
     if (!isClickedAdd) {
@@ -46,15 +46,14 @@ class List extends React.Component {
   // Change Title name
   handleTitleChange = title => {
     const { id } = this.props.list;
-    const { onAddNewCard } = this.props;
+
     // console.log('handleTitleChange', title, id);
     return this.props.onTitleChange(id, title);
   };
 
   render() {
     const {
-      onAddNewCard,
-      list: { id, title },
+      list: { title },
     } = this.props;
 
     const footerAdd = this.state.isClickedAdd ? (
