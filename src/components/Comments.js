@@ -1,4 +1,5 @@
 import React from 'react';
+import Comment from './Comment';
 
 class Comments extends React.Component {
   constructor(props) {
@@ -29,30 +30,6 @@ class Comments extends React.Component {
       user: { avatar, firstName, surname },
     } = comment;
     // console.log('id this.state.id', typeof id, typeof this.state.id);
-    const elemComment =
-      id == comment.id ? (
-        <div>
-          <textarea
-            ref={this.commentRef}
-            key={comment.id}
-            id={comment.id}
-            className="form-control mt-2"
-            defaultValue={comment.text}
-            onBlur={this.handleSaveEditedComment}
-          />
-          <button
-            className="form-control btn btn-secondary"
-            onClick={() => this.handleSaveEditedComment()}
-            id={comment.id}
-          >
-            Save
-          </button>
-        </div>
-      ) : (
-        <div key={comment.id} className="form-control mt-2">
-          {comment.text}
-        </div>
-      );
 
     return (
       <div key={comment.id} id={comment.id} className="mt-3">
@@ -66,7 +43,7 @@ class Comments extends React.Component {
         <button id={comment.id} className="float-right btn btn-info mr-1" onClick={this.handleClickChangeComment}>
           Edit
         </button>
-        {elemComment}
+        <Comment comment={this.props.comment} onChange={}/>
       </div>
     );
   };
