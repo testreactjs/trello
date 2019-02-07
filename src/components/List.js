@@ -11,11 +11,7 @@ class List extends React.Component {
     this.titleInputRef = React.createRef();
     this.addInputRef = React.createRef();
 
-    const {
-      list: { title },
-    } = props;
-
-    this.state = { isClickedHeader: false, title, titleNewCard: '', isClickedAdd: false };
+    this.state = { isClickedHeader: false, isClickedAdd: false };
   }
 
   // Add new card

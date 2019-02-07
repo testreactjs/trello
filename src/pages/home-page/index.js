@@ -1,7 +1,9 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-
 import { v4 } from 'uuid';
+import { createActions, handleActions, combineActions } from 'redux-actions';
+
+import constants from '../../constants';
 import { List, Lists, PopupLogin, Card } from '../../components';
 import lists from '../../data';
 import { getData, saveData } from '../../storage';
@@ -18,6 +20,18 @@ const fakeComments = commentFactory(2000, {
   userId: fakeUsers,
   cardId: fakeCards,
 });
+
+console.log(constants);
+/*
+const constants = {
+  ADD_CARD: 'ADD_CARD',
+  DEL_CARD: 'DEL_CARD',
+};
+*/
+const reducerCards = (state = [], action) => {
+  return [];
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -33,7 +47,7 @@ class App extends React.Component {
       },
       user: user || '',
     };
-    // console.log(this.state.data);
+    console.log(this.state.data);
   }
 
   // Logout
@@ -61,18 +75,17 @@ class App extends React.Component {
   };
 
   // Add new card
+
   handleAddCard = (listId, title) => {
-    const { data } = this.state;
-    const updatedData = data.map(list => {
-      const { id } = list;
-      if (id === listId) {
-        const { cards } = list;
-        const idCard = v4();
-        return { ...list, cards: [...cards, { listId, id: idCard, title, text: '', user: [], comments: [] }] };
-      }
-      return list;
+    const {
+      data: { cards: cardsFromState },
+    } = this.state;
+
+    const lastCard = cardsFromState[cardsFromState.length - 1];
+    const cards = [...cardsFromState, { userId: lastCard.userId, listId, id: lastCard.id + 1, title }];
+    this.setState({
+      data: { ...this.state.data, cards },
     });
-    this.setState({ data: updatedData });
   };
 
   // Login
