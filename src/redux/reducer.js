@@ -1,7 +1,7 @@
 import { createStore } from 'redux';
 import { createAction, createActions, handleActions, combineActions } from 'redux-actions';
 
-const testCard = [
+const initialStateCard = [
   {
     listId: 7,
     userId: 19,
@@ -17,28 +17,13 @@ const testCard = [
     text: 'sit ullam mollitia optio minima rerum amet laudantium blanditiis occaecati',
   },
 ];
+function reducer(state = initialStateCard, action) {}
 
-function handleCardAdd(title) {
-  console.log('handleCardAdd');
-  return {
-    listId: 2,
-    userId: 13,
-    id: 3,
-    title,
-    text: '',
-  };
-}
+const store = createStore(reducer);
+// store.dispatch();
 
 const addCard = createAction('ADDCARD');
 const delCard = createAction('DELCARD');
-
-const defaultState = { cards: [...testCard] };
-console.log(defaultState);
-
-function handleDelCard(id) {
-  console.log('del');
-  return {};
-}
 
 const reducer = handleActions(
   {

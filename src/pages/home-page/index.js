@@ -1,14 +1,18 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { v4 } from 'uuid';
-import { createActions, handleActions, combineActions } from 'redux-actions';
-
-import constants from '../../constants';
+import '../../redux/reducer';
+// import constants from '../../constants';
+import { createActions, handleActions } from 'redux-actions';
 import { List, Lists, PopupLogin, Card } from '../../components';
-import lists from '../../data';
+// import lists from '../../data';
 import { getData, saveData } from '../../storage';
 import { usersSelector, getList, commentsSelector, listsSelector, cardsSelector } from '../../selectors';
 import { listFactory, userFactory, cardFactory, commentFactory } from '../../factories';
+/* -===============
+ */
+
+// import { reducer } from '../../redux/reducer';
 
 const fakeLists = listFactory(10);
 const fakeUsers = userFactory(20);
@@ -20,17 +24,6 @@ const fakeComments = commentFactory(2000, {
   userId: fakeUsers,
   cardId: fakeCards,
 });
-
-console.log(constants);
-/*
-const constants = {
-  ADD_CARD: 'ADD_CARD',
-  DEL_CARD: 'DEL_CARD',
-};
-*/
-const reducerCards = (state = [], action) => {
-  return [];
-};
 
 class App extends React.Component {
   constructor(props) {
