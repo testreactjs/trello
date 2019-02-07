@@ -86,7 +86,7 @@ class PopupCard extends React.Component {
           <textarea
             rows="3"
             className="form-control"
-            value={text}
+            defaultValue={text}
             onBlur={this.handleSubmitDescription}
             onChange={this.handleDescription}
           />

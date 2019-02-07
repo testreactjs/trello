@@ -33,7 +33,7 @@ class App extends React.Component {
       },
       user: user || '',
     };
-    console.log(this.state.data);
+    // console.log(this.state.data);
   }
 
   // Logout
@@ -55,12 +55,12 @@ class App extends React.Component {
       }
       return list;
     });
-
     this.setState({
       data: { ...this.state.data, lists },
     });
   };
 
+  // Add new card
   handleAddCard = (listId, title) => {
     const { data } = this.state;
     const updatedData = data.map(list => {
@@ -72,7 +72,6 @@ class App extends React.Component {
       }
       return list;
     });
-
     this.setState({ data: updatedData });
   };
 
@@ -87,6 +86,8 @@ class App extends React.Component {
     this.setState({ card, isClickedOnCard: true });
   };
 
+  // Change Title Card
+  // changed!!
   handleCardChangeTitle = (title, id) => {
     const {
       data: { cards: cardsFromState },
@@ -111,116 +112,53 @@ class App extends React.Component {
       }
       return card;
     });
-
-    this.setState({ date: { ...this.state.data, cards } });
+    this.setState({ data: { ...this.state.data, cards } });
   };
 
   // Add new comment
-  // changing
+  // changed
   handleAddComment = (text, cardId) => {
     const {
       data: { comments: commentsFromState },
     } = this.state;
-
-    /*
-    const { data } = this.state;
-    const updatedData = data.map(list => {
-      const { id } = list;
-      if (id === listId) {
-        const { cards } = list;
-        const newCards = cards.map(item => {
-          if (item.id === card.id) {
-            const comments = [
-              ...item.comments,
-              {
-                id: v4(),
-                text,
-                user: {
-                  id: 100000,
-                  firstName: 'Ivan',
-                  surname: 'Ivanov',
-                  avatar: 'https://www.w3schools.com/howto/img_avatar.png',
-                },
-              },
-            ];
-            return { ...card, comments };
-          }
-          return item;
-        });
-        return { ...list, cards: newCards };
-      }
-      return list;
-    });
-    this.setState({ data: updatedData });
-    */
+    const lastComment = commentsFromState[commentsFromState.length - 1];
+    const comments = [...commentsFromState, { userId: lastComment.userId, cardId, id: lastComment.id + 1, text }];
+    this.setState({ data: { ...this.state.data, comments } });
   };
 
   // Del card
-  handleRemoveCard = (cardId, listId) => {
-    // console.log(cardId, listId);
-    const { data } = this.state;
-    const updatedData = data.map(list => {
-      const { id } = list;
-      if (id === listId) {
-        const { cards } = list;
-        console.log('cards', cards);
-        const newCards = cards.filter(item => item.id !== cardId);
-        return { ...list, cards: newCards };
-      }
-      return list;
-    });
-    this.setState({ data: updatedData });
+  // changed
+  handleRemoveCard = cardId => {
+    const {
+      data: { cards: cardsFromState },
+    } = this.state;
+    const cards = cardsFromState.filter(card => cardId !== card.id);
+    this.setState({ data: { ...this.state.data, cards } });
   };
 
-  // change comment
-  handleEditComment = (text, idComment, card, listId) => {
-    // console.log('handleEditComment', text, idComment, card, listId);
-    const { data } = this.state;
-    const updatedData = data.map(list => {
-      const { id } = list;
-      if (id === listId) {
-        const { cards } = list;
-        const newCards = cards.map(item => {
-          if (item.id === card.id) {
-            const comments = item.comments.map(value => {
-              // console.log('Rvalue.id === idComment', value.id, idComment);
-              if (value.id == idComment) {
-                // console.log('Return', { idComment, text, user: value.user, text });
-                return { id: idComment, text, user: value.user };
-              }
-              return value;
-            });
-            return { ...card, comments };
-          }
-          return item;
-        });
-        return { ...list, cards: newCards };
+  // Change comment
+  // changed
+  handleEditComment = (text, idComment) => {
+    // console.log('handleEditComment', text, idComment);
+    const {
+      data: { comments: commentsFromState },
+    } = this.state;
+    const comments = commentsFromState.map(comment => {
+      if (comment.id === Number(idComment)) {
+        return { ...comment, text };
       }
-      return list;
+      return comment;
     });
-    this.setState({ data: updatedData });
+    this.setState({ data: { ...this.state.data, comments } });
   };
 
-  handleDeleteComment = (commentId, card, listId) => {
-    const { data, isClickedOnCard } = this.state;
-    const updatedData = data.map(list => {
-      const { id } = list;
-      if (id === listId) {
-        const { cards } = list;
-        const newCards = cards.map(item => {
-          if (item.id === card.id) {
-            const comments = item.comments.filter(item => item.id !== commentId);
-            return { ...card, comments };
-          }
-          return item;
-        });
-        // this.setState({ card: newCards });
-        return { ...list, cards: newCards };
-      }
-      return list;
-    });
-    // console.log(updatedData);
-    this.setState({ data: updatedData });
+  // Delete comment
+  handleDeleteComment = commentId => {
+    const {
+      data: { comments: commmentsFromState },
+    } = this.state;
+    const comments = commmentsFromState.filter(comment => comment.id !== Number(commentId));
+    this.setState({ data: { ...this.state.data, comments } });
   };
 
   render() {
@@ -252,8 +190,8 @@ class App extends React.Component {
                   onCardSubmitTitle={title => this.handleCardChangeTitle(title, card.id)}
                   onSubmitDescription={text => this.handleCardChangeDescription(text, card.id)}
                   onCardAddComment={text => this.handleAddComment(text, card.id)}
-                  onCardEditComment={(text, id) => this.handleEditComment(text, id, card.id)}
-                  onCardDeleteComment={id => this.handleDeleteComment(id, card.id)}
+                  onCardEditComment={(text, id) => this.handleEditComment(text, id)}
+                  onCardDeleteComment={id => this.handleDeleteComment(id)}
                   onCardRemoveCard={cardId => this.handleRemoveCard(card.id)}
                   card={card}
                 />
