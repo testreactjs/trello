@@ -5,9 +5,8 @@ class Comments extends React.Component {
     super(props);
     this.state = {
       id: '',
-      comment: '',
-      text: '',
     };
+    this.commentRef = React.createRef();
   }
 
   handleClickChangeComment = event => {
@@ -15,41 +14,30 @@ class Comments extends React.Component {
     // console.log(event.currentTarget.id);
   };
 
-  handleChangeClickComment = event => {
-    this.setState({ text: event.target.value });
-  };
-
-  handleChangeComment = event => {
-    this.setState({ text: event.target.value });
-  };
-
   handleSaveEditedComment = event => {
-    const { text } = this.state;
+    const text = this.commentRef.current.value;
     if (text !== '') {
-      this.setState({ id: '', text: '' });
-      this.props.onEdit(text, event.currentTarget.id);
+      this.setState({ id: '' });
+      this.props.onEdit(text, this.commentRef.current.id);
     }
   };
 
   // Show comment after map comments
   showComment = (value, i) => {
     const { id } = this.state;
-
     const {
       user: { avatar, firstName, surname },
     } = value;
     // console.log('id this.state.id', typeof id, typeof this.state.id);
-    const text = this.state.text === '' ? value.text : this.state.text;
     const comment =
       id == value.id ? (
         <div>
           <textarea
+            ref={this.commentRef}
             key={value.id}
             id={value.id}
             className="form-control mt-2"
-            value={text}
-            onClick={this.handleChangeClickComment}
-            onChange={this.handleChangeComment}
+            defaultValue={value.text}
             onBlur={this.handleSaveEditedComment}
           />
           <button className="form-control btn btn-secondary" onClick={this.handleSaveEditedComment} id={value.id}>
@@ -57,13 +45,13 @@ class Comments extends React.Component {
           </button>
         </div>
       ) : (
-        <div key={i} className="form-control mt-2">
+        <div key={value.id} className="form-control mt-2">
           {value.text}
         </div>
       );
 
     return (
-      <div key={i} id={value.id} className="mt-3">
+      <div key={value.id} id={value.id} className="mt-3">
         <span className="h3">
           <img src={avatar} width="20" />
           {firstName} {surname} :
