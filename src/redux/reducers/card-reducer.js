@@ -60,16 +60,7 @@ const cardReducer = handleActions(
   {
     [types.ADD_CARD]: (state, action) => {
       const { payload: card } = action;
-      return [
-        ...state,
-        {
-          listId: action.listId,
-          userId: action.userId,
-          id: action.id,
-          title: action.title,
-          text: action.text,
-        },
-      ];
+      return [...state, card];
     },
     [types.REMOVE_CARD]: (state, action) => {
       return [...state.filter(card => card.id !== action.id)];
