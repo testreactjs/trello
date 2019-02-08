@@ -1,5 +1,6 @@
 import { createStore, combineReducers } from 'redux';
 import { createAction, createActions, handleActions, combineActions } from 'redux-actions';
+import cardReducer from './card-reducer';
 
 const initialStateCard = [
   {
@@ -17,40 +18,6 @@ const initialStateCard = [
     text: 'sit ullam mollitia optio minima rerum amet laudantium blanditiis occaecati',
   },
 ];
-const constants = {
-  ADD_CARD: 'ADD_CARD',
-  REMOVE_CARD: 'REMOVE_CARD',
-  CHANGE_TITLE_CARD: 'CHANGE_TITLE_CARD',
-};
-
-const reducerCards = (state, action) => {
-  switch (action.type) {
-    case constants.ADD_CARD:
-      return [...state, reducerCard({}, action)];
-    case constants.REMOVE_CARD:
-      return [...state, state.filter(card => card.id !== action.id)];
-    default:
-      return state;
-  }
-};
-const reducerCard = (state, action) => {
-  switch (action.type) {
-    case constants.CHANGE_TITLE_CARD:
-      return {
-        id: action.id,
-      };
-    case constants.ADD_CARD:
-      return {
-        listId: action.listId,
-        userId: action.userId,
-        id: action.id,
-        title: action.title,
-        text: action.text,
-      };
-    default:
-      return state;
-  }
-};
 
 const actionAdd = {
   type: 'ADD_CARD',
@@ -60,17 +27,28 @@ const actionAdd = {
   title: 'test',
   text: 'test2',
 };
+
+const testDel = id => ({
+  type: 'REMOVE_CARD',
+  id,
+});
+
 const actionDel = {
+  type: 'REMOVE_CARD',
   id: 3,
 };
 
-const store = createStore(reducerCards, initialStateCard);
+const store = createStore(cardReducer, initialStateCard);
+// store.subscribe(() => console.log('change store'));
 
+const logState = () => console.log('next state', store.getState());
+const unsubscribeLogger = store.subscribe(logState);
 // console.log(reducerCards(initialStateCard, actionAdd));
 // console.log(reducerCards(initialStateCard, actionDel));
-console.log(store.getState());
+// console.log(store.getState());
+console.log(store.dispatch(testDel(1)));
 console.log(store.dispatch(actionAdd));
-console.log(store.getState());
+// console.log(store.getState());
 
 /*
 function reducer(state = initialStateCard, action) {}
