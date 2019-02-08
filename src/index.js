@@ -4,7 +4,18 @@ import './index.css';
 import { HomePage } from './pages';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<HomePage />, document.getElementById('root'));
+// import reducers from './redux/reducers';
+// import createStore from './redux/create-store';
+
+// const store = createStore(reducers);
+
+class App extends React.Component {
+  render() {
+    return <HomePage />;
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

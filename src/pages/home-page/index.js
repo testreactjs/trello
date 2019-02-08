@@ -1,18 +1,10 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import { v4 } from 'uuid';
-import '../../redux/reducer';
-// import constants from '../../constants';
-import { createActions, handleActions } from 'redux-actions';
 import { List, Lists, PopupLogin, Card } from '../../components';
-// import lists from '../../data';
-import { getData, saveData } from '../../storage';
-import { usersSelector, getList, commentsSelector, listsSelector, cardsSelector } from '../../selectors';
-import { listFactory, userFactory, cardFactory, commentFactory } from '../../factories';
-/* -===============
- */
 
-// import { reducer } from '../../redux/reducer';
+import { getData, saveData } from '../../storage';
+import { getList } from '../../selectors';
+import { listFactory, userFactory, cardFactory, commentFactory } from '../../factories';
 
 const fakeLists = listFactory(10);
 const fakeUsers = userFactory(20);
@@ -24,7 +16,6 @@ const fakeComments = commentFactory(2000, {
   userId: fakeUsers,
   cardId: fakeCards,
 });
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -68,7 +59,6 @@ class App extends React.Component {
   };
 
   // Add new card
-
   handleAddCard = (listId, title) => {
     const {
       data: { cards: cardsFromState },
@@ -150,7 +140,7 @@ class App extends React.Component {
       data: { comments: commentsFromState },
     } = this.state;
     const comments = commentsFromState.map(comment => {
-      if (comment.id === Number(idComment)) {
+      if (comment.id === idComment) {
         return { ...comment, text };
       }
       return comment;
