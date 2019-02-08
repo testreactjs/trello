@@ -1,4 +1,4 @@
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import { createAction, createActions, handleActions, combineActions } from 'redux-actions';
 
 const initialStateCard = [
@@ -23,7 +23,7 @@ const constants = {
   CHANGE_TITLE_CARD: 'CHANGE_TITLE_CARD',
 };
 
-const reducerCards = (state = initialStateCard, action) => {
+const reducerCards = (state, action) => {
   switch (action.type) {
     case constants.ADD_CARD:
       return [...state, reducerCard({}, action)];
@@ -33,7 +33,7 @@ const reducerCards = (state = initialStateCard, action) => {
       return state;
   }
 };
-const reducerCard = (state = initialStateCard, action) => {
+const reducerCard = (state, action) => {
   switch (action.type) {
     case constants.CHANGE_TITLE_CARD:
       return {
@@ -64,8 +64,14 @@ const actionDel = {
   id: 3,
 };
 
-console.log(reducerCards(initialStateCard, actionAdd));
-console.log(reducerCards(initialStateCard, actionDel));
+const store = createStore(reducerCards, initialStateCard);
+
+// console.log(reducerCards(initialStateCard, actionAdd));
+// console.log(reducerCards(initialStateCard, actionDel));
+console.log(store.getState());
+console.log(store.dispatch(actionAdd));
+console.log(store.getState());
+
 /*
 function reducer(state = initialStateCard, action) {}
 
