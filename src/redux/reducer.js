@@ -17,6 +17,51 @@ const initialStateCard = [
     text: 'sit ullam mollitia optio minima rerum amet laudantium blanditiis occaecati',
   },
 ];
+const constants = {
+  ADD_CARD: 'ADD_CARD',
+  REMOVE_CARD: 'REMOVE_CARD',
+  CHANGE_TITLE_CARD: 'CHANGE_TITLE_CARD',
+};
+
+const refucerCards = (state = initialStateCard, action) => {
+  switch (action.type) {
+    case constants.ADD_CARD:
+      return [...state, reducerCard({}, action)];
+    default:
+      return state;
+  }
+};
+const reducerCard = (state = initialStateCard, action) => {
+  switch (action.type) {
+    case constants.CHANGE_TITLE_CARD:
+      return {
+        id: action.id,
+      };
+    case constants.ADD_CARD:
+      return {
+        listId: action.listId,
+        userId: action.userId,
+        id: action.id,
+        title: action.title,
+        text: action.text,
+      };
+    default:
+      return state;
+  }
+};
+
+const action = {
+  type: 'ADD_CARD',
+  listId: 1,
+  userId: 1,
+  id: 3,
+  title: 'test',
+  text: 'test2',
+};
+
+console.log(refucerCards(initialStateCard, action));
+
+/*
 function reducer(state = initialStateCard, action) {}
 
 const store = createStore(reducer);
@@ -41,6 +86,7 @@ const reducer = handleActions(
 
 console.log(addCard('test new card'));
 console.log(defaultState);
+*/
 /*
 const defaultState = { counter: 10 };
 const { increment, decrement } = createActions({
@@ -59,4 +105,3 @@ const reducer = handleActions(
 */
 
 console.log('the end redux..............................');
-export default { addCard, delCard };
