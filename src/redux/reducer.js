@@ -23,10 +23,12 @@ const constants = {
   CHANGE_TITLE_CARD: 'CHANGE_TITLE_CARD',
 };
 
-const refucerCards = (state = initialStateCard, action) => {
+const reducerCards = (state = initialStateCard, action) => {
   switch (action.type) {
     case constants.ADD_CARD:
       return [...state, reducerCard({}, action)];
+    case constants.REMOVE_CARD:
+      return [...state, state.filter(card => card.id !== action.id)];
     default:
       return state;
   }
@@ -50,7 +52,7 @@ const reducerCard = (state = initialStateCard, action) => {
   }
 };
 
-const action = {
+const actionAdd = {
   type: 'ADD_CARD',
   listId: 1,
   userId: 1,
@@ -58,9 +60,12 @@ const action = {
   title: 'test',
   text: 'test2',
 };
+const actionDel = {
+  id: 3,
+};
 
-console.log(refucerCards(initialStateCard, action));
-
+console.log(reducerCards(initialStateCard, actionAdd));
+console.log(reducerCards(initialStateCard, actionDel));
 /*
 function reducer(state = initialStateCard, action) {}
 
