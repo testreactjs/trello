@@ -1,8 +1,6 @@
 import { createStore } from 'redux';
-import { cardReducer, initialStateCards } from './reducers/card-reducer';
+import { rootReducer } from './reducers';
 
-export default reducers => {
-  return {};
-};
+export const store = createStore(rootReducer);
 
-export const store = createStore(cardReducer, initialStateCards);
+const unsubscribe = store.subscribe(() => console.log('Change store', store.getState()));

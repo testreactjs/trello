@@ -7,9 +7,12 @@ import { store } from '../../redux/store';
 import { List, Lists, PopupLogin, Card } from '../../components';
 import { getData, saveData } from '../../storage';
 import { getList } from '../../selectors';
+
+import { fakeUsers, fakeComments } from '../../redux/reducers/fake-data';
+/*
 import { listFactory, userFactory, cardFactory, commentFactory } from '../../factories';
 
-const fakeLists = listFactory(10);
+// const fakeLists = listFactory(10);
 const fakeUsers = userFactory(20);
 const fakeCards = cardFactory(200, {
   listId: fakeLists,
@@ -19,6 +22,7 @@ const fakeComments = commentFactory(2000, {
   userId: fakeUsers,
   cardId: fakeCards,
 });
+*/
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -27,14 +31,15 @@ class App extends React.Component {
 
     this.state = {
       data: {
-        users: fakeUsers,
-        lists: fakeLists,
-        cards: fakeCards,
+        users: this.props.users,
+        // lists: fakeLists,
+        lists: this.props.lists,
+        cards: this.props.cards,
         comments: fakeComments,
       },
       user: user || '',
     };
-    console.log(this.state.data);
+    console.log('this.props', this.props);
   }
 
   // Logout
@@ -162,6 +167,11 @@ class App extends React.Component {
 
   render() {
     const { data } = this.state;
+    // const data2 = {...data, this.props.cards);
+    // const { users, comments } = this.state.data;
+    // const { cards, lists } = this.props;
+    // const data = { data: { users, comments, cards, lists } };
+    console.log(data);
     const mappedData = getList(data);
 
     return this.state.user === '' ? (
@@ -207,6 +217,8 @@ const mapStateToProps = store => {
   console.log(store);
   return {
     cards: store.cards,
+    lists: store.lists,
+    users: store.users,
   };
 };
 

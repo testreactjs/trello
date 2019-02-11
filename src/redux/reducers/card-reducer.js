@@ -1,20 +1,6 @@
-import { handleActions, combineActions } from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import * as types from '../types';
-import { List, Lists, PopupLogin, Card } from '../../components';
-import { getData, saveData } from '../../storage';
-import { getList } from '../../selectors';
-import { listFactory, userFactory, cardFactory, commentFactory } from '../../factories';
-
-const fakeLists = listFactory(10);
-const fakeUsers = userFactory(20);
-const fakeCards = cardFactory(200, {
-  listId: fakeLists,
-  userId: fakeUsers,
-});
-const fakeComments = commentFactory(2000, {
-  userId: fakeUsers,
-  cardId: fakeCards,
-});
+import { fakeCards } from './fake-data';
 
 export const initialStateCards = fakeCards;
 
