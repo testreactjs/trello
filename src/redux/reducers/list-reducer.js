@@ -1,4 +1,4 @@
-import { handleActions, combineActions } from 'redux-actions';
+import { handleActions } from 'redux-actions';
 import * as types from '../types';
 import { fakeLists } from './fake-data';
 

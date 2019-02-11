@@ -1,5 +1,4 @@
 import React from 'react';
-import { convertPatternsToTasks } from 'fast-glob/out/managers/tasks';
 import Card from './Card';
 import Cards from './Cards';
 import EditableH3 from './widgets/EditableH3';

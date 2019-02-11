@@ -8,7 +8,7 @@ import { List, Lists, PopupLogin, Card } from '../../components';
 import { getData, saveData } from '../../storage';
 import { getList } from '../../selectors';
 
-import { fakeUsers, fakeComments } from '../../redux/reducers/fake-data';
+import * as actions from '../../redux/actions';
 /*
 import { listFactory, userFactory, cardFactory, commentFactory } from '../../factories';
 
@@ -173,7 +173,7 @@ class App extends React.Component {
     // const { users, comments } = this.state.data;
     // const { cards, lists } = this.props;
     // const data = { data: { users, comments, cards, lists } };
-    console.log(data);
+    // console.log(data);
     const mappedData = getList(data);
 
     return this.state.user === '' ? (
@@ -194,7 +194,7 @@ class App extends React.Component {
           itemRenderer={list => (
             <List
               list={list}
-              onTitleChange={this.handleListTitleChange}
+              onTitleChange={this.props.changeTitleList}
               onAddNewCard={this.handleAddCard}
               itemRenderer={card => (
                 <Card
@@ -225,7 +225,16 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = dispatch => {
+  console.log('dispatch', dispatch);
+  return {
+    changeTitleList: (id, title) => dispatch(actions.changeTitleList(id, title)),
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(App);
 
 /*
         <pre>{JSON.stringify(this.state.data, 2, 2)}</pre>
