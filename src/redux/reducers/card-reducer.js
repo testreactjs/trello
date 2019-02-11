@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import * as types from '../types';
-import { fakeCards } from './fake-data';
+import { fakeCards } from '../fake-data';
 
 export const initialStateCards = fakeCards;
 
@@ -15,14 +15,12 @@ export const cardReducer = handleActions(
     },
     [types.CHANGE_TITLE_CARD]: (state, action) => {
       const { title } = action;
-      const cardsFromState = state.concat();
-      const cards = cardsFromState.map(card => {
+      return state.map(card => {
         if (action.id === card.id) {
           return { ...card, title };
         }
         return card;
       });
-      return [...state, cards];
     },
   },
   initialStateCards,

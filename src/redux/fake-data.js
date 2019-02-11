@@ -1,4 +1,4 @@
-import { listFactory, userFactory, cardFactory, commentFactory } from '../../factories';
+import { listFactory, userFactory, cardFactory, commentFactory } from '../factories';
 
 export const fakeLists = listFactory(10);
 export const fakeUsers = userFactory(20);

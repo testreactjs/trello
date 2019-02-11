@@ -7,4 +7,4 @@ export const removeCard = createAction(types.REMOVE_CARD);
 export const changeTitleCard = createAction(types.CHANGE_TITLE_CARD);
 
 // lists
-export const changeTitleList = createAction(types.CHANGE_TITLE_LIST, (id, title) => (id, title));
+export const changeTitleListAction = createAction(types.CHANGE_TITLE_LIST);

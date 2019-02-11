@@ -23,11 +23,9 @@ export const getCards = createSelector(
   [cardsSelector, usersSelector, getComments],
   (cards, users, comments) => {
     return cards.map(card => {
-      // find cards.userId = user.id
       const { userId, id } = card;
       const user = users.find(value => value.id === userId);
       const cardComments = comments.filter(value => value.cardId === id);
-      // find card.id = comments.id
 
       return {
         ...card,
@@ -42,7 +40,6 @@ export const getList = createSelector(
   [listsSelector, getCards],
   (lists, cards) => {
     return lists.map(list => {
-      // find list.id = cards.id
       const { id } = list;
       const listCards = cards.filter(item => item.listId === id);
       return {
@@ -52,12 +49,3 @@ export const getList = createSelector(
     });
   },
 );
-
-// export const get
-
-// export const getLists = createSelector(
-//   [fakeLists, fakeUsers, fakeCards, fakeComments],
-//   (lists, users, cards, comments) => {
-//     return lists.map();
-//   },
-// );

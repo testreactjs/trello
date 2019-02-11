@@ -17,7 +17,7 @@ class EditableH3 extends React.Component {
     event.preventDefault();
     const title = this.titleInputRef.current.value;
     // console.log(title);
-    this.setState({ isClickedHeader: false }, this.props.onChange(title));
+    this.setState({ isClickedHeader: false }, () => this.props.onChange(title));
   };
 
   render() {

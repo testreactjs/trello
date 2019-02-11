@@ -1,8 +1,6 @@
 import React from 'react';
-import Card from './Card';
-import Cards from './Cards';
+
 import EditableH3 from './widgets/EditableH3';
-import { getData } from '../storage';
 
 class List extends React.Component {
   constructor(props) {
@@ -44,10 +42,11 @@ class List extends React.Component {
 
   // Change Title name
   handleTitleChange = title => {
-    const { id } = this.props.list;
-
-    // console.log('handleTitleChange', title, id);
-    return this.props.onTitleChange(id, title);
+    const {
+      list: { id },
+      onTitleChange,
+    } = this.props;
+    return onTitleChange({ id, title });
   };
 
   render() {
