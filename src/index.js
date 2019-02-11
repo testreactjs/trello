@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import './index.css';
 import { HomePage } from './pages';
 import * as serviceWorker from './serviceWorker';
+import { store } from './redux/store';
 
 // import reducers from './redux/reducers';
 // import createStore from './redux/create-store';
@@ -11,7 +13,11 @@ import * as serviceWorker from './serviceWorker';
 
 class App extends React.Component {
   render() {
-    return <HomePage />;
+    return (
+      <Provider store={store}>
+        <HomePage />
+      </Provider>
+    );
   }
 }
 

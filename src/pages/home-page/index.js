@@ -1,7 +1,10 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import { List, Lists, PopupLogin, Card } from '../../components';
 
+import { connect } from 'react-redux';
+import { store } from '../../redux/store';
+
+import { List, Lists, PopupLogin, Card } from '../../components';
 import { getData, saveData } from '../../storage';
 import { getList } from '../../selectors';
 import { listFactory, userFactory, cardFactory, commentFactory } from '../../factories';
@@ -199,7 +202,17 @@ class App extends React.Component {
     );
   }
 }
+
+const mapStateToProps = store => {
+  console.log(store);
+  return {
+    cards: store.cards,
+  };
+};
+
+export default connect(mapStateToProps)(App);
+
 /*
         <pre>{JSON.stringify(this.state.data, 2, 2)}</pre>
         */
-export default App;
+// export default App;
