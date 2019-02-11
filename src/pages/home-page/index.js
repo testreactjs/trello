@@ -22,8 +22,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     const user = getData('username');
-    // const { data } = this.state;
-
     this.state = {
       user: user || '',
     };
@@ -43,18 +41,6 @@ class App extends React.Component {
 
   handleCardClick = card => {
     this.setState({ card, isClickedOnCard: true });
-  };
-
-  // Del card
-  // changed
-  handleRemoveCard = cardId => {
-    /*
-    const {
-      data: { cards: cardsFromState },
-    } = this.state;
-    const cards = cardsFromState.filter(card => cardId !== card.id);
-    this.setState({ data: { ...this.state.data, cards } });
-    */
   };
 
   render() {
