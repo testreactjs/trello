@@ -30,13 +30,15 @@ class App extends React.Component {
     // const { data } = this.state;
 
     this.state = {
+      /*
       data: {
         users: this.props.users,
         // lists: fakeLists,
         lists: this.props.lists,
         cards: this.props.cards,
-        comments: fakeComments,
+        comments: this.props.comments,
       },
+      */
       user: user || '',
     };
     console.log('this.props', this.props);
@@ -166,7 +168,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { data } = this.state;
+    const data = { ...this.props };
     // const data2 = {...data, this.props.cards);
     // const { users, comments } = this.state.data;
     // const { cards, lists } = this.props;
@@ -219,6 +221,7 @@ const mapStateToProps = store => {
     cards: store.cards,
     lists: store.lists,
     users: store.users,
+    comments: store.comments,
   };
 };
 
