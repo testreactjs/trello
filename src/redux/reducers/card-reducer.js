@@ -7,17 +7,29 @@ export const initialStateCards = fakeCards;
 export const cardReducer = handleActions(
   {
     [types.ADD_CARD]: (state, action) => {
-      const { payload: card } = action;
-      return [...state, card];
+      const {
+        payload: { id, title },
+      } = action;
+      const lastCard = state[state.length - 1];
+      return [...state, { userId: lastCard.userId, listId: id, id: lastCard.id + 1, title }];
     },
     [types.REMOVE_CARD]: (state, action) => {
       return [...state.filter(card => card.id !== action.id)];
     },
     [types.CHANGE_TITLE_CARD]: (state, action) => {
-      const { title } = action;
+      const { title, id } = action.payload;
       return state.map(card => {
-        if (action.id === card.id) {
+        if (card.id === id) {
           return { ...card, title };
+        }
+        return card;
+      });
+    },
+    [types.CHANGE_DESCRIPTION_CARD]: (state, action) => {
+      const { text, id } = action.payload;
+      return state.map(card => {
+        if (card.id === id) {
+          return { ...card, text };
         }
         return card;
       });

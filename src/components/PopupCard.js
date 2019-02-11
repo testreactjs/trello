@@ -23,7 +23,11 @@ class PopupCard extends React.Component {
   }
 
   handleTitleSubmit = title => {
-    this.props.onCardSubmitTitle(title);
+    const {
+      onCardSubmitTitle,
+      card: { id },
+    } = this.props;
+    onCardSubmitTitle({ title, id });
   };
 
   // Change description for card
@@ -32,9 +36,12 @@ class PopupCard extends React.Component {
   };
 
   handleSubmitDescription = e => {
-    const { onSubmitDescription } = this.props;
+    const {
+      onSubmitDescription,
+      card: { id },
+    } = this.props;
     const { text } = this.state;
-    onSubmitDescription(text);
+    onSubmitDescription({ text, id });
   };
 
   // Add new comment

@@ -7,7 +7,13 @@ import { List, Lists, PopupLogin, Card } from '../../components';
 import { getData, saveData } from '../../storage';
 import { getList } from '../../selectors';
 
-import { changeTitleListAction } from '../../redux/actions';
+import {
+  changeTitleListAction,
+  addCardAction,
+  changeTitleCardAction,
+  changeDescriptionCardAction,
+  addCommentAction,
+} from '../../redux/actions';
 
 class App extends React.Component {
   constructor(props) {
@@ -26,41 +32,6 @@ class App extends React.Component {
     this.setState({ user: '' });
   };
 
-  // Change Title
-  /*
-  handleListTitleChange = (listId, title) => {
-    const {
-      data: { lists: listsFromState },
-    } = this.state;
-    const lists = listsFromState.map(list => {
-      if (list.id === listId) {
-        return {
-          ...list,
-          title,
-        };
-      }
-      return list;
-    });
-    this.setState({
-      data: { ...this.state.data, lists },
-    });
-  };
-*/
-  // Add new card
-  handleAddCard = (listId, title) => {
-    /*
-    const {
-      data: { cards: cardsFromState },
-    } = this.state;
-
-    const lastCard = cardsFromState[cardsFromState.length - 1];
-    const cards = [...cardsFromState, { userId: lastCard.userId, listId, id: lastCard.id + 1, title }];
-    this.setState({
-      data: { ...this.state.data, cards },
-    });
-    */
-  };
-
   // Login
   togglePopup = value => {
     // console.log("togglePopup". value);
@@ -70,23 +41,6 @@ class App extends React.Component {
 
   handleCardClick = card => {
     this.setState({ card, isClickedOnCard: true });
-  };
-
-  // Change Title Card
-  // changed!!
-  handleCardChangeTitle = (title, id) => {
-    /*
-    const {
-      data: { cards: cardsFromState },
-    } = this.state;
-    const cards = cardsFromState.map(card => {
-      if (id === card.id) {
-        return { ...card, title };
-      }
-      return card;
-    });
-    this.setState({ data: { ...this.state.data, cards } });
-    */
   };
 
   // changed!!
@@ -160,8 +114,15 @@ class App extends React.Component {
   };
 
   render() {
-    const { list: mappedListData, handleChangeListTitle } = this.props;
-    console.log(handleChangeListTitle);
+    const {
+      list: mappedListData,
+      handleChangeListTitle,
+      handleAddCard,
+      handleCardChangeTitle,
+      handleCardChangeDescription,
+      handleAddComment,
+    } = this.props;
+
     const { user } = this.state;
     console.log('render', mappedListData);
     return user === '' ? (
@@ -183,12 +144,12 @@ class App extends React.Component {
             <List
               list={list}
               onTitleChange={handleChangeListTitle}
-              onAddNewCard={this.handleAddCard}
+              onAddNewCard={handleAddCard}
               itemRenderer={card => (
                 <Card
-                  onCardSubmitTitle={title => this.handleCardChangeTitle({ title, cardId: card.id })}
-                  onSubmitDescription={text => this.handleCardChangeDescription(text, card.id)}
-                  onCardAddComment={text => this.handleAddComment(text, card.id)}
+                  onCardSubmitTitle={handleCardChangeTitle}
+                  onSubmitDescription={handleCardChangeDescription}
+                  onCardAddComment={handleAddComment}
                   onCardEditComment={(text, id) => this.handleEditComment(text, id)}
                   onCardDeleteComment={id => this.handleDeleteComment(id)}
                   onCardRemoveCard={cardId => this.handleRemoveCard(card.id)}
@@ -211,6 +172,10 @@ const mapStateToProps = store => {
 
 const mapDispatchToProps = {
   handleChangeListTitle: changeTitleListAction,
+  handleAddCard: addCardAction,
+  handleCardChangeTitle: changeTitleCardAction,
+  handleCardChangeDescription: changeDescriptionCardAction,
+  handleAddComment: addCommentAction,
 };
 
 export default connect(

@@ -21,6 +21,7 @@ class Card extends React.Component {
 
   render() {
     const { isShowingModal } = this.state;
+
     const {
       card,
       onSubmitDescription,

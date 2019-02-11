@@ -7,7 +7,6 @@ class List extends React.Component {
     super(props);
     this.titleInputRef = React.createRef();
     this.addInputRef = React.createRef();
-
     this.state = { isClickedHeader: false, isClickedAdd: false };
   }
 
@@ -24,15 +23,14 @@ class List extends React.Component {
       this.setState({ isClickedAdd: true });
     } else {
       this.setState({ isClickedAdd: false });
-      return onAddNewCard(id, this.addInputRef.current.value);
+      const title = this.addInputRef.current.value;
+      return onAddNewCard({ id, title });
     }
   };
 
   renderCards = () => {
     const { itemRenderer, list } = this.props;
     const { cards } = list;
-    // console.log('this.props List', this.props);
-    // console.log('Cards', this.props);
     return cards.map(card => {
       return React.cloneElement(itemRenderer(card), {
         key: card.id,
