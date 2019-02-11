@@ -13,8 +13,9 @@ export const cardReducer = handleActions(
       const lastCard = state[state.length - 1];
       return [...state, { userId: lastCard.userId, listId: id, id: lastCard.id + 1, title }];
     },
-    [types.REMOVE_CARD]: (state, action) => {
-      return [...state.filter(card => card.id !== action.id)];
+    [types.DELETE_CARD]: (state, action) => {
+      const { id } = action.payload;
+      return [...state.filter(card => card.id !== id)];
     },
     [types.CHANGE_TITLE_CARD]: (state, action) => {
       const { title, id } = action.payload;

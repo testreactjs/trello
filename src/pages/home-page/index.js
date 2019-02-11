@@ -12,7 +12,10 @@ import {
   addCardAction,
   changeTitleCardAction,
   changeDescriptionCardAction,
+  deleteCardAction,
   addCommentAction,
+  editCommentAction,
+  delCommentAction,
 } from '../../redux/actions';
 
 class App extends React.Component {
@@ -24,7 +27,6 @@ class App extends React.Component {
     this.state = {
       user: user || '',
     };
-    console.log('this.props', this.props);
   }
 
   // Logout
@@ -43,35 +45,6 @@ class App extends React.Component {
     this.setState({ card, isClickedOnCard: true });
   };
 
-  // changed!!
-  handleCardChangeDescription = (text, cardId) => {
-    /*
-    const {
-      data: { cards: cardsFromState },
-    } = this.state;
-    const cards = cardsFromState.map(card => {
-      if (cardId === card.id) {
-        return { ...card, text };
-      }
-      return card;
-    });
-    this.setState({ data: { ...this.state.data, cards } });
-    */
-  };
-
-  // Add new comment
-  // changed
-  handleAddComment = (text, cardId) => {
-    /*
-    const {
-      data: { comments: commentsFromState },
-    } = this.state;
-    const lastComment = commentsFromState[commentsFromState.length - 1];
-    const comments = [...commentsFromState, { userId: lastComment.userId, cardId, id: lastComment.id + 1, text }];
-    this.setState({ data: { ...this.state.data, comments } });
-    */
-  };
-
   // Del card
   // changed
   handleRemoveCard = cardId => {
@@ -84,35 +57,6 @@ class App extends React.Component {
     */
   };
 
-  // Change comment
-  // changed
-  handleEditComment = (text, idComment) => {
-    /*
-    // console.log('handleEditComment', text, idComment);
-    const {
-      data: { comments: commentsFromState },
-    } = this.state;
-    const comments = commentsFromState.map(comment => {
-      if (comment.id === idComment) {
-        return { ...comment, text };
-      }
-      return comment;
-    });
-    this.setState({ data: { ...this.state.data, comments } });
-    */
-  };
-
-  // Delete comment
-  handleDeleteComment = commentId => {
-    /*
-    const {
-      data: { comments: commmentsFromState },
-    } = this.state;
-    const comments = commmentsFromState.filter(comment => comment.id !== Number(commentId));
-    this.setState({ data: { ...this.state.data, comments } });
-    */
-  };
-
   render() {
     const {
       list: mappedListData,
@@ -120,11 +64,14 @@ class App extends React.Component {
       handleAddCard,
       handleCardChangeTitle,
       handleCardChangeDescription,
+      handleDeleteCard,
       handleAddComment,
+      handleEditComment,
+      handleDeleteComment,
     } = this.props;
 
     const { user } = this.state;
-    console.log('render', mappedListData);
+
     return user === '' ? (
       <PopupLogin text="Введите свое имя:" closePopup={this.togglePopup} />
     ) : (
@@ -150,9 +97,9 @@ class App extends React.Component {
                   onCardSubmitTitle={handleCardChangeTitle}
                   onSubmitDescription={handleCardChangeDescription}
                   onCardAddComment={handleAddComment}
-                  onCardEditComment={(text, id) => this.handleEditComment(text, id)}
-                  onCardDeleteComment={id => this.handleDeleteComment(id)}
-                  onCardRemoveCard={cardId => this.handleRemoveCard(card.id)}
+                  onCardEditComment={handleEditComment}
+                  onCardDeleteComment={handleDeleteComment}
+                  onCardRemoveCard={handleDeleteCard}
                   card={card}
                 />
               )}
@@ -175,7 +122,10 @@ const mapDispatchToProps = {
   handleAddCard: addCardAction,
   handleCardChangeTitle: changeTitleCardAction,
   handleCardChangeDescription: changeDescriptionCardAction,
+  handleDeleteCard: deleteCardAction,
   handleAddComment: addCommentAction,
+  handleEditComment: editCommentAction,
+  handleDeleteComment: delCommentAction,
 };
 
 export default connect(

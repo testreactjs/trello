@@ -3,4 +3,4 @@ import { rootReducer } from './reducers';
 
 export const store = createStore(rootReducer);
 
-const unsubscribe = store.subscribe(() => console.log('Change store', store.getState()));
+// const unsubscribe = store.subscribe(() => console.log('Change store', store.getState()));

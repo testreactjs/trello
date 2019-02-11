@@ -52,7 +52,11 @@ class PopupCard extends React.Component {
   handleButtonAddComment = () => {
     const { comment } = this.state;
     if (comment.trim() === '') return;
-    this.props.onCardAddComment(comment);
+    const {
+      onCardAddComment,
+      card: { id },
+    } = this.props;
+    onCardAddComment({ text: comment, cardId: id });
     this.setState({ isClickedAdd: false, comment: '' });
   };
 
@@ -61,8 +65,7 @@ class PopupCard extends React.Component {
 
     const {
       onClose,
-      card: { user, title, text, comments },
-      id,
+      card: { user, title, text, comments, id },
     } = this.props;
 
     const { firstName, surname, avatar } = user;
@@ -121,7 +124,7 @@ class PopupCard extends React.Component {
           <button
             type="button"
             className="btn btn-secondary form-control mt-4"
-            onClick={() => this.props.onCardRemoveCard(id)}
+            onClick={() => this.props.onCardRemoveCard({ id })}
           >
             Удалить карточку
           </button>

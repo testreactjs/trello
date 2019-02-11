@@ -17,7 +17,8 @@ class Comment extends React.Component {
     const text = this.commentRef.current.value;
 
     if (text !== '') {
-      this.setState({ isClickedHeader: false }, this.props.onChange(text, id));
+      this.setState({ isClickedHeader: false });
+      this.props.onChange({ text, id });
     }
   };
 
@@ -34,7 +35,7 @@ class Comment extends React.Component {
           <img src={avatar} width="20" />
           {firstName} {surname} :
         </span>
-        <button className="float-right btn btn-info" onClick={() => this.props.onDelete(id)}>
+        <button className="float-right btn btn-info" onClick={() => this.props.onDelete({ id })}>
           Delete
         </button>
         <button className="float-right btn btn-info mr-1" onClick={() => this.handleChange()}>
